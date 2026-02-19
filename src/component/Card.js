@@ -1,14 +1,15 @@
 import React from 'react';
 import './Card.css';
-import{link} from 'react-router-dom';
+import { Link } from 'react-router-dom'; // ✅ แก้จาก link เป็น Link (ตัวพิมพ์ใหญ่)
 
-const Card = ({ 
-  name = "XXXXXXXXXXXXXXXXXXX",        // ✅ เปลี่ยนจาก title เป็น name
-  name_th = "XXXXXXXXXXXXXXXXXXX",     // ✅ เปลี่ยนจาก subtitle เป็น name_th
-  project = "XXXXXXXXXXXXXXXXXXX",     // ✅ เปลี่ยนจาก subtitle เป็น project
-  location = "XXXXXXXXXXXXXXXXXXX",    // ✅ เปลี่ยนจาก infoLine2 เป็น location
-  tags = [],                           // ✅ เปลี่ยนเป็น array ของ objects
-  email = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"  // ✅ เปลี่ยนจาก footer เป็น email
+const Card = ({
+  id, // ✅ รับ id มาเพื่อใช้ทำ Link
+  name = "XXXXXXXXXXXXXXXXXXX",
+  name_th = "XXXXXXXXXXXXXXXXXXX",
+  project = "XXXXXXXXXXXXXXXXXXX",
+  location = "XXXXXXXXXXXXXXXXXXX",
+  tags = [],
+  email = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }) => {
   return (
     <div className="card">
@@ -20,7 +21,10 @@ const Card = ({
           </svg>
         </div>
         <div className="card-title-section">
-          <h3 className="card-title">{name}</h3>
+          {/* ✅ ครอบ Link เฉพาะที่ชื่อภาษาอังกฤษ */}
+          <Link to={`/member/${id}`} className="card-link">
+            <h3 className="card-title">{name}</h3>
+          </Link>
           <p className="card-subtitle">{name_th}</p>
         </div>
       </div>
@@ -35,7 +39,7 @@ const Card = ({
           </svg>
           <span>{project}</span>
         </div>
-        
+
         <div className="info-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
             <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -47,7 +51,7 @@ const Card = ({
 
       <div className="card-tags">
         {tags.map((tag, index) => (
-          <button key={index} className={`tag-button ${tag.label}`}>
+          <button key={index} className="tag-button">
             {tag.label}
           </button>
         ))}

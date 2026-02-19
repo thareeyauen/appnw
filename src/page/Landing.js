@@ -41,25 +41,20 @@ function Landing() {
           <p className="people-count">{contacts.length} people</p>
         )}
 
-        <div className="card-list">
-          {contacts.map(contact => (
-            /* 2. Wrap Card with Link using the dynamic ID */
-            <Link 
-              to={`/member/${contact.id}`} 
-              key={contact.id} 
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <Card
-                name={contact.name}
-                name_th={contact.name_th}
-                project={contact.project}
-                location={contact.location}
-                tags={contact.tags}
-                email={contact.email}
-              />
-            </Link>
-          ))}
-        </div>
+<div className="card-list">
+  {contacts.map(contact => (
+    <Card
+      key={contact.id}
+      id={contact.id} 
+      name={contact.name}
+      name_th={contact.name_th}
+      project={contact.project}
+      location={contact.location}
+      tags={contact.tags}
+      email={contact.email}
+    />
+  ))}
+</div>
       </div>
     </div>
   );
