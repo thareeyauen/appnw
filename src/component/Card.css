@@ -160,9 +160,9 @@
 }
 
 .card-link {
-  text-decoration: none; /* เอาเส้นใต้ออก */
-  color: inherit;       /* ใช้สีเดิมของ h3 */
+  text-decoration: none; 
+  color: inherit;      
 }
 .card-link:hover .card-title {
-  color: #ff4400;       /* เปลี่ยนสีเฉพาะตอนเอาเมาส์ไปชี้ (ถ้าต้องการ) */
+  color: #ff4400;     
 }
