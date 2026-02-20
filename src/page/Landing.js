@@ -1,11 +1,13 @@
 import Card from '../component/Card';
 import './Landing.css';
-import React, { useState, useEffect } from "react"; 
-import { Link } from 'react-router-dom'; // 1. Import Link
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 
 function Landing() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3000/api/people')
@@ -24,7 +26,21 @@ function Landing() {
     <div className="landing-container">
       <div className="top-bar">
         <button className="add-member">+ Add New member</button>
-        <span className="profile-icon">👤</span>
+        <div className="profile-wrapper" onClick={() => setShowMenu(!showMenu)}>
+          <span className="profile-icon">👤</span>
+          {showMenu && (
+            <div className="profile-dropdown">
+              <div className="dropdown-item">
+                <span>My Profile</span>
+                <span className="arrow">›</span>
+              </div>
+              <div className="dropdown-item logout" onClick={() => navigate('/Login')}>
+                <span>Log out</span>
+                <span className="arrow">›</span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="content">
