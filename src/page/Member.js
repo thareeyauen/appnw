@@ -114,14 +114,49 @@ const Member = () => {
           <h2 className="section-title">Organization Detail</h2>
           <div className="form-group">
             <label className="form-label">Organization Name (EN)</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              value={member.project} 
-              readOnly 
+            <input
+              type="text"
+              className="form-input"
+              value={member.project || ''}
+              readOnly
             />
           </div>
-          {/* ส่วนอื่นๆ สามารถเพิ่มได้ตามโครงสร้างข้อมูลของคุณ */}
+          <div className="form-group">
+            <label className="form-label">ชื่อองค์กร (ไทย)</label>
+            <input
+              type="text"
+              className="form-input"
+              value={member.project_th || ''}
+              readOnly
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Position (EN)</label>
+            <input
+              type="text"
+              className="form-input"
+              value={member.position || ''}
+              readOnly
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">ตำแหน่ง (ไทย)</label>
+            <input
+              type="text"
+              className="form-input"
+              value={member.position_th || ''}
+              readOnly
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Country / ประเทศ</label>
+            <input
+              type="text"
+              className="form-input"
+              value={member.country || ''}
+              readOnly
+            />
+          </div>
         </section>
       </div>
     </div>

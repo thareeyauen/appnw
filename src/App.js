@@ -5,6 +5,7 @@ import Landing from "./page/Landing";
 import Member from "./page/Member";
 import Admin from "./page/Admin/Admin";
 import Card from "./component/Card";
+import Addmember from "./page/Addmember";
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/1" element={<Card />} />
         <Route path="/member/:id" element={<Member />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/addmember" element={<Addmember />} />
       </Routes>
   );
 }

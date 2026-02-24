@@ -25,7 +25,7 @@ function Landing() {
   return (
     <div className="landing-container">
       <div className="top-bar">
-        <button className="add-member">+ Add New member</button>
+        <button className="add-member" onClick={() => navigate('/addmember')}>+ Add New member</button>
         <div className="profile-wrapper" onClick={() => setShowMenu(!showMenu)}>
           <span className="profile-icon">👤</span>
           {showMenu && (
