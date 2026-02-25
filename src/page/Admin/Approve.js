@@ -72,9 +72,13 @@ const Approve = () => {
   const [nameCardName, setNameCardName] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/people/${id}`)
-      .then((res) => res.json())
+    fetch(`http://localhost:3000/api/admin/submissions/${id}`)
+      .then((res) => {
+        console.log('[Approve] HTTP status:', res.status);
+        return res.json();
+      })
       .then((data) => {
+        console.log('[Approve] API response:', data);
         setMember(data);
         const tagLabel =
           Array.isArray(data.tags) && data.tags.length > 0
@@ -136,8 +140,8 @@ const Approve = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/api/people/${id}`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:3000/api/admin/submissions/${id}/approve`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
@@ -162,8 +166,8 @@ const Approve = () => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/people/${id}`, {
-        method: 'DELETE',
+      const response = await fetch(`http://localhost:3000/api/admin/submissions/${id}/reject`, {
+        method: 'PATCH',
       });
 
       if (!response.ok) throw new Error(`เกิดข้อผิดพลาด (${response.status})`);

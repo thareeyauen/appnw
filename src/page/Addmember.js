@@ -94,10 +94,11 @@ const Addmember = () => {
       position: formData.position,
       position_th: formData.position_th,
       country: formData.country,
+      note: formData.note,
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/people', {
+      const response = await fetch('http://localhost:3000/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -105,7 +106,6 @@ const Addmember = () => {
 
       if (!response.ok) {
         const STATUS_MESSAGES = {
-          400: 'ข้อมูลไม่ถูกต้อง (400) — กรุณาตรวจสอบข้อมูลที่กรอกอีกครั้ง',
           401: 'ไม่มีสิทธิ์เข้าถึง (401) — กรุณาล็อกอินใหม่',
           403: 'ถูกปฏิเสธการเข้าถึง (403) — คุณไม่มีสิทธิ์ดำเนินการนี้',
           404: 'ไม่พบ API endpoint (404) — กรุณาติดต่อผู้ดูแลระบบ',
@@ -115,6 +115,20 @@ const Addmember = () => {
           502: 'เซิร์ฟเวอร์ไม่ตอบสนอง (502) — กรุณาลองใหม่อีกครั้ง',
           503: 'บริการไม่พร้อมใช้งาน (503) — เซิร์ฟเวอร์อาจกำลังบำรุงรักษา',
         };
+
+        if (response.status === 400) {
+          let detail = '';
+          try {
+            const body = await response.json();
+            detail = body.message || body.error || body.detail
+              || (Array.isArray(body.errors)
+                ? body.errors.map((e) => e.msg || e.message || JSON.stringify(e)).join(', ')
+                : '');
+          } catch (_) {}
+          const base = 'ข้อมูลไม่ถูกต้อง (400) — กรุณาตรวจสอบข้อมูลที่กรอกอีกครั้ง';
+          throw new Error(detail ? `${base}\nสาเหตุ: ${detail}` : base);
+        }
+
         const message = STATUS_MESSAGES[response.status]
           || `เกิดข้อผิดพลาด (${response.status}) — ไม่สามารถเพิ่มสมาชิกได้`;
         throw new Error(message);
@@ -234,7 +248,7 @@ const Addmember = () => {
             <div className="form-group">
               <label className="form-label">Email / อีเมล</label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 className="form-input"
                 placeholder="example@email.com"

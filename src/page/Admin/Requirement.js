@@ -18,7 +18,7 @@ const Requirement = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/people')
+    fetch('http://localhost:3000/api/admin/submissions')
       .then((res) => res.json())
       .then((data) => {
         setMembers(data);
