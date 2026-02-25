@@ -40,13 +40,17 @@ const Addmember = () => {
     email: '',
     tags: '',
     tagsOther: '',
+    network: '',
     project: '',
     project_th: '',
     position: '',
     position_th: '',
     country: '',
+    note: '',
   });
 
+  const [profileImage, setProfileImage] = useState(null);
+  const [nameCard, setNameCard] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -62,8 +66,18 @@ const Addmember = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
     setError(null);
+
+    // ตรวจสอบว่ามีข้อมูลอย่างน้อย 1 ช่อง หรือมีไฟล์ Name Card
+    const hasAnyField = Object.entries(formData).some(
+      ([key, val]) => key !== 'tagsOther' && String(val).trim() !== ''
+    );
+    if (!hasAnyField && !nameCard) {
+      setError('กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง หรือเพิ่ม Name Card');
+      return;
+    }
+
+    setSubmitting(true);
 
     const tagLabel = formData.tags === 'Other' ? formData.tagsOther : formData.tags;
     const tagsArray = tagLabel ? [{ label: tagLabel }] : [];
@@ -74,6 +88,7 @@ const Addmember = () => {
       location: formData.location,
       email: formData.email,
       tags: tagsArray,
+      network: formData.network,
       project: formData.project,
       project_th: formData.project_th,
       position: formData.position,
@@ -88,12 +103,31 @@ const Addmember = () => {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error('Failed to add member');
+      if (!response.ok) {
+        const STATUS_MESSAGES = {
+          400: 'ข้อมูลไม่ถูกต้อง (400) — กรุณาตรวจสอบข้อมูลที่กรอกอีกครั้ง',
+          401: 'ไม่มีสิทธิ์เข้าถึง (401) — กรุณาล็อกอินใหม่',
+          403: 'ถูกปฏิเสธการเข้าถึง (403) — คุณไม่มีสิทธิ์ดำเนินการนี้',
+          404: 'ไม่พบ API endpoint (404) — กรุณาติดต่อผู้ดูแลระบบ',
+          409: 'ข้อมูลซ้ำ (409) — อีเมลหรือข้อมูลนี้มีอยู่ในระบบแล้ว',
+          422: 'ข้อมูลไม่ผ่านการตรวจสอบ (422) — กรุณาตรวจสอบรูปแบบข้อมูล',
+          500: 'เซิร์ฟเวอร์เกิดข้อผิดพลาด (500) — กรุณาลองใหม่อีกครั้งในภายหลัง',
+          502: 'เซิร์ฟเวอร์ไม่ตอบสนอง (502) — กรุณาลองใหม่อีกครั้ง',
+          503: 'บริการไม่พร้อมใช้งาน (503) — เซิร์ฟเวอร์อาจกำลังบำรุงรักษา',
+        };
+        const message = STATUS_MESSAGES[response.status]
+          || `เกิดข้อผิดพลาด (${response.status}) — ไม่สามารถเพิ่มสมาชิกได้`;
+        throw new Error(message);
+      }
 
       setSuccess(true);
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
-      setError(err.message);
+      if (err.name === 'TypeError') {
+        setError('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ — กรุณาตรวจสอบว่า Backend กำลังทำงานอยู่ (http://localhost:3000)');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -118,19 +152,40 @@ const Addmember = () => {
       </div>
 
       <div className="addmember-content">
-        {/* Avatar placeholder */}
-        <div className="profile-avatar">
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <circle cx="12" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
+        {/* Avatar — คลิกเพื่ออัปโหลดรูป */}
+        <label className="avatar-upload-label">
+          <div className="profile-avatar">
+            {profileImage ? (
+              <img src={profileImage} alt="Profile" className="avatar-preview" />
+            ) : (
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="12" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
+            <div className="avatar-overlay">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="12" cy="13" r="4" stroke="white" strokeWidth="2"/>
+              </svg>
+            </div>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) setProfileImage(URL.createObjectURL(file));
+            }}
+          />
+        </label>
 
         <form onSubmit={handleSubmit}>
           {/* Personal Detail */}
@@ -146,7 +201,6 @@ const Addmember = () => {
                 placeholder="e.g. John Smith"
                 value={formData.name}
                 onChange={handleChange}
-                required
               />
             </div>
 
@@ -186,7 +240,6 @@ const Addmember = () => {
                 placeholder="example@email.com"
                 value={formData.email}
                 onChange={handleChange}
-                required
               />
             </div>
 
@@ -212,9 +265,20 @@ const Addmember = () => {
                   placeholder="ระบุความเชี่ยวชาญของคุณ"
                   value={formData.tagsOther}
                   onChange={handleChange}
-                  required
                 />
               )}
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Other Network / เครือข่ายอื่น ๆ</label>
+              <input
+                type="text"
+                name="network"
+                className="form-input"
+                placeholder="e.g. Network name"
+                value={formData.network}
+                onChange={handleChange}
+              />
             </div>
           </section>
 
@@ -285,6 +349,40 @@ const Addmember = () => {
               </select>
             </div>
           </section>
+
+          {/* Note */}
+          <div className="note-section">
+            <h2 className="note-title">Note</h2>
+            <textarea
+              name="note"
+              className="form-input note-textarea"
+              placeholder="Value"
+              value={formData.note}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Add Name Card */}
+          <div className="name-card-row">
+            <label className="name-card-button">
+              <span className="name-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                  <rect x="3" y="3" width="18" height="18" rx="2" fill="#1a1a1a"/>
+                  <path d="M3 17l5-5 4 4 3-3 6 6" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="8.5" cy="8.5" r="1.5" fill="white"/>
+                </svg>
+              </span>
+              <span className="name-card-label">
+                {nameCard ? nameCard.name : 'Add Name Card'}
+              </span>
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => setNameCard(e.target.files[0] || null)}
+              />
+            </label>
+          </div>
 
           {/* Error / Success */}
           {error && <p className="form-error">{error}</p>}

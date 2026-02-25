@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Admin.css';
 
+
 const Admin = () => {
   const navigate = useNavigate();
 
@@ -21,7 +22,12 @@ const Admin = () => {
       </div>
 
       <div className="admin-content">
-        <p>Admin page content goes here.</p>
+        <div className="admin-section">
+          <h2 className="admin-section-title">Requirements</h2>
+          <button className="admin-menu-button" onClick={() => navigate('/requirements')}>
+            Requirements
+          </button>
+        </div>
       </div>
     </div>
   );

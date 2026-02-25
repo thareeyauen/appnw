@@ -6,6 +6,8 @@ import Member from "./page/Member";
 import Admin from "./page/Admin/Admin";
 import Card from "./component/Card";
 import Addmember from "./page/Addmember";
+import Requirement from "./page/Admin/Requirement";
+import Approve from "./page/Admin/Approve";
 import './App.css';
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
         <Route path="/member/:id" element={<Member />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/addmember" element={<Addmember />} />
+        <Route path="/requirements" element={<Requirement />} />
+        <Route path="/approve/:id" element={<Approve />} />
       </Routes>
   );
 }

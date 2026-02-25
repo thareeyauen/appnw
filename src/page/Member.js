@@ -49,7 +49,14 @@ const Member = () => {
 
       <div className="member-content">
         <div className="profile-avatar">
-           {/* SVG เหมือนเดิม */}
+          {member.avatar ? (
+            <img src={member.avatar} alt="Profile" className="avatar-preview" />
+          ) : (
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="12" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
         </div>
 
         {/* Personal Detail - นำข้อมูลจาก member มาใช้ */}
@@ -107,6 +114,15 @@ const Member = () => {
               ))}
             </div>
           </div>
+          <div className="form-group">
+            <label className="form-label">Other Network / เครือข่ายอื่น ๆ</label>
+            <input
+              type="text"
+              className="form-input"
+              value={member.network || ''}
+              readOnly
+            />
+          </div>
         </section>
 
         {/* Organization Detail */}
@@ -158,6 +174,30 @@ const Member = () => {
             />
           </div>
         </section>
+
+        {/* Note */}
+        {member.note && (
+          <div className="note-section">
+            <h2 className="note-title">Note</h2>
+            <textarea
+              className="form-input note-textarea"
+              value={member.note}
+              readOnly
+            />
+          </div>
+        )}
+
+        {/* Name Card */}
+        {member.nameCard && (
+          <div className="name-card-preview-section">
+            <h2 className="note-title">Name Card</h2>
+            <img
+              src={member.nameCard}
+              alt="Name Card"
+              className="name-card-image"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,22 +3,27 @@ import './Card.css';
 import { Link } from 'react-router-dom'; // ✅ แก้จาก link เป็น Link (ตัวพิมพ์ใหญ่)
 
 const Card = ({
-  id, // ✅ รับ id มาเพื่อใช้ทำ Link
+  id,
   name = "XXXXXXXXXXXXXXXXXXX",
   name_th = "XXXXXXXXXXXXXXXXXXX",
   project = "XXXXXXXXXXXXXXXXXXX",
   location = "XXXXXXXXXXXXXXXXXXX",
   tags = [],
-  email = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  email = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  avatar = null,
 }) => {
   return (
     <div className="card">
       <div className="card-header">
         <div className="avatar">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="8" r="4" fill="currentColor"/>
-            <path d="M6 21C6 17.686 8.686 15 12 15C15.314 15 18 17.686 18 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
+          {avatar ? (
+            <img src={avatar} alt="Profile" className="avatar-img" />
+          ) : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8" r="4" fill="currentColor"/>
+              <path d="M6 21C6 17.686 8.686 15 12 15C15.314 15 18 17.686 18 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          )}
         </div>
         <div className="card-title-section">
           {/* ✅ ครอบ Link เฉพาะที่ชื่อภาษาอังกฤษ */}

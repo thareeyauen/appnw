@@ -61,13 +61,14 @@ function Landing() {
   {contacts.map(contact => (
     <Card
       key={contact.id}
-      id={contact.id} 
+      id={contact.id}
       name={contact.name}
       name_th={contact.name_th}
       project={contact.project}
       location={contact.location}
       tags={contact.tags}
       email={contact.email}
+      avatar={contact.avatar}
     />
   ))}
 </div>

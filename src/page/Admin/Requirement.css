@@ -1,0 +1,137 @@
+.requirement-page {
+  min-height: 100vh;
+  background: #d4e157;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+/* Header */
+.requirement-header {
+  background: #d4e157;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.back-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.requirement-header-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+/* Content */
+.requirement-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.requirement-loading,
+.requirement-empty {
+  color: #1a1a1a;
+  font-size: 16px;
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* Card */
+.req-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.req-card-header {
+  margin: 0 0 10px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.req-card-date {
+  font-size: 13px;
+  font-weight: 400;
+  color: #718096;
+}
+
+.req-card-list {
+  margin: 0 0 12px 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.req-card-list li {
+  font-size: 14px;
+  color: #2d3748;
+  list-style: disc;
+}
+
+.req-label {
+  font-weight: 600;
+}
+
+/* Footer */
+.req-card-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.req-edit-button {
+  background: #ff4b48;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.req-edit-button:hover {
+  background: #f7ca4d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .requirement-header {
+    padding: 16px;
+  }
+
+  .requirement-header-title {
+    font-size: 24px;
+  }
+
+  .requirement-content {
+    padding: 0 16px 32px 16px;
+  }
+}
