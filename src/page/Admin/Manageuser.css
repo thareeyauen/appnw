@@ -1,0 +1,259 @@
+.mu-page {
+  min-height: 100vh;
+  background: #F5F0E8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ── Header ── */
+.mu-header {
+  background: #F5F0E8;
+  padding: 20px 20px 0 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mu-back-btn {
+  background: transparent;
+  border: none;
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+  transition: background 0.2s ease;
+}
+
+.mu-back-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.mu-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  font-style: italic;
+  color: #1a1a1a;
+  line-height: 1.15;
+}
+
+/* ── Content ── */
+.mu-content {
+  padding: 24px 20px 48px 20px;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mu-loading {
+  color: #555;
+  font-size: 15px;
+  margin: 32px 0;
+}
+
+/* ── Table ── */
+.mu-table-wrapper {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+}
+
+.mu-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: transparent;
+}
+
+/* thead ไม่ scroll */
+.mu-table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* tbody scroll เดี่ยว */
+.mu-table tbody {
+  display: block;
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #584c46 transparent;
+}
+
+.mu-table tbody::-webkit-scrollbar {
+  width: 5px;
+}
+
+.mu-table tbody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mu-table tbody::-webkit-scrollbar-thumb {
+  background: #584c46;
+  border-radius: 10px;
+}
+
+.mu-table tbody::-webkit-scrollbar-thumb:hover {
+  background: #3e3530;
+}
+
+/* แถวใน tbody ต้อง display: table เพื่อให้ column ตรงกับ thead */
+.mu-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.mu-th {
+  background: #5B9BD5;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px 14px;
+  text-align: left;
+}
+
+.mu-th-no {
+  width: 52px;
+  text-align: center;
+}
+
+.mu-th-type {
+  width: 130px;
+}
+
+.mu-th-manage {
+  text-align: center;
+  width: 120px;
+}
+
+.mu-tr {
+  background: #edeae4;
+}
+
+.mu-tr:not(:last-child) {
+  border-bottom: 1px solid #b3aea7;
+}
+
+.mu-td {
+  padding: 13px 14px;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.mu-td-no {
+  width: 52px;
+  text-align: center;
+  color: #555;
+}
+
+.mu-td-type {
+  width: 130px;
+  color: #555;
+}
+
+.mu-td-manage {
+  width: 120px;
+  text-align: center;
+}
+
+.mu-edit-btn {
+  background: #bf4343;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 6px 14px;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.mu-edit-btn:hover {
+  background: #3e3530;
+}
+
+.mu-empty {
+  text-align: center;
+  padding: 20px;
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+/* ── Add more data label ── */
+.mu-add-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 4px 0 12px 0;
+  text-align: center;
+}
+
+/* ── Upload CSV button ── */
+.mu-csv-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: #ffffff;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #e53935;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  transition: background 0.2s ease;
+}
+
+.mu-csv-btn:hover {
+  background: #f5f5f5;
+}
+
+/* ── Error / Success ── */
+.mu-error {
+  color: #c62828;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.mu-success {
+  color: #2e7d32;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+/* ── SAVE button ── */
+.mu-save-btn {
+  padding: 14px 56px;
+  background: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s ease;
+}
+
+.mu-save-btn:hover {
+  background: #333;
+}
+
+.mu-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

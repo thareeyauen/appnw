@@ -30,7 +30,7 @@ function Landing() {
           <span className="profile-icon">👤</span>
           {showMenu && (
             <div className="profile-dropdown">
-              <div className="dropdown-item">
+              <div className="dropdown-item" onClick={() => navigate('/profile')}>
                 <span>My Profile</span>
                 <span className="arrow">›</span>
               </div>

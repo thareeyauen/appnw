@@ -23,6 +23,27 @@ const Admin = () => {
 
       <div className="admin-content">
         <div className="admin-section">
+          <h2 className="admin-section-title">Member</h2>
+          <button className="admin-menu-button" onClick={() => navigate('/manage-members')}>
+            Manage member list
+          </button>
+        </div>
+
+        <div className="admin-section">
+          <h2 className="admin-section-title">User</h2>
+          <button className="admin-menu-button" onClick={() => navigate('/manage-users')}>
+            Manage user list
+          </button>
+        </div>
+
+        <div className="admin-section">
+          <h2 className="admin-section-title">Data</h2>
+          <button className="admin-menu-button" onClick={() => navigate('/data-management')}>
+            Data Management
+          </button>
+        </div>
+
+        <div className="admin-section">
           <h2 className="admin-section-title">Requirements</h2>
           <button className="admin-menu-button" onClick={() => navigate('/requirements')}>
             Requirements

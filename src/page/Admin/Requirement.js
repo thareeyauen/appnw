@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Requirement.css';
 
 const formatDate = (dateStr) => {
@@ -14,21 +14,29 @@ const formatDate = (dateStr) => {
 
 const Requirement = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // location.key เปลี่ยนทุกครั้งที่ navigate มาหน้านี้
+  // → force re-fetch เสมอ ไม่ใช้ข้อมูลเก่า
   useEffect(() => {
+    setLoading(true);
     fetch('http://localhost:3000/api/admin/submissions')
       .then((res) => res.json())
       .then((data) => {
-        setMembers(data);
+        // แสดงเฉพาะ pending (status === 'pending' หรือ ไม่มี status field)
+        const pending = Array.isArray(data)
+          ? data.filter((m) => !m.status || m.status === 'pending')
+          : [];
+        setMembers(pending);
         setLoading(false);
       })
       .catch((err) => {
         console.error('Error fetching members:', err);
         setLoading(false);
       });
-  }, []);
+  }, [location.key]);
 
   const handleBack = () => navigate('/admin');
 

@@ -1,6 +1,6 @@
 .admin-page {
   min-height: 100vh;
-  background: #d4e157;
+  background: #F5F0E8;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -8,7 +8,7 @@
 
 /* Header */
 .admin-header {
-  background: #d4e157;
+  background: #F5F0E8;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -61,12 +61,12 @@
 .admin-menu-button {
   width: 100%;
   padding: 20px;
-  background: #f0f0f0;
+  background: #bf4343;
   border: none;
   border-radius: 16px;
   font-size: 20px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #e8e8e8;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: background 0.2s ease, box-shadow 0.2s ease;
@@ -74,7 +74,7 @@
 }
 
 .admin-menu-button:hover {
-  background: #e8e8e8;
+  background: #323030;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 

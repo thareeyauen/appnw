@@ -1,6 +1,6 @@
 .addmember-page {
   min-height: 100vh;
-  background: #d4e157;
+  background: #B8D4E8;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -8,7 +8,7 @@
 
 /* Header */
 .addmember-header {
-  background: #d4e157;
+  background: #B8D4E8;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -155,9 +155,9 @@
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #d4e157;
+  border-color: #72a2eb;
   background: white;
-  box-shadow: 0 0 0 3px rgba(212, 225, 87, 0.25);
+  box-shadow: 0 0 0 3px rgba(124, 191, 242, 0.25);
 }
 
 .form-input::placeholder,

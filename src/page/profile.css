@@ -1,0 +1,320 @@
+.profile-page {
+  min-height: 100vh;
+  background: #F0EDE4;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ── Header ── */
+.profile-header {
+  background: #F0EDE4;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-back-btn {
+  background: transparent;
+  border: none;
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.profile-back-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.profile-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  font-style: italic;
+  color: #1a1a1a;
+}
+
+/* ── Content wrapper ── */
+.profile-content {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 20px 48px 20px;
+}
+
+/* ── Section headings ── */
+.profile-section-heading {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* ── Personal Details card ── */
+.profile-details-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.profile-field-value {
+  background: #ece9e5;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.profile-field-muted {
+  color: #000000;
+}
+
+.reset-password-btn {
+  width: 100%;
+  padding: 12px;
+  background: #bf4343;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.reset-password-btn:hover {
+  background: #a92118;
+}
+
+/* ── My Request list ── */
+.request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Request card (matches Requirement.js admin card style) */
+.req-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.req-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Status badge */
+.req-status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.status-pending {
+  background: #fff8e1;
+  color: #b8860b;
+  border: 1px solid #ffe082;
+}
+
+.status-approved {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.status-rejected {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+/* Bullet list */
+.req-card-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.req-card-list li {
+  font-size: 13px;
+  color: #333;
+}
+
+.req-label {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Card footer with Cancel button */
+.req-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.cancel-request-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancel-request-btn:hover {
+  background: #c62828;
+}
+
+.profile-empty {
+  color: #555;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+/* ── Reset Password Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 24px;
+}
+
+.modal-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px 24px 36px 24px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  font-style: italic;
+  color: #1a1a1a;
+}
+
+.modal-close-btn {
+  width: 38px;
+  height: 38px;
+  border: 2px solid #e53935;
+  border-radius: 8px;
+  background: transparent;
+  color: #e53935;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(229, 57, 53, 0.08);
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 12px;
+  background: white;
+  font-size: 15px;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.modal-input::placeholder {
+  color: #bbb;
+}
+
+.modal-input:focus {
+  border-color: #aab800;
+}
+
+.modal-save-btn {
+  align-self: center;
+  padding: 13px 52px;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.2s ease;
+}
+
+.modal-save-btn:hover {
+  background: #333;
+}

@@ -134,6 +134,37 @@ const Addmember = () => {
         throw new Error(message);
       }
 
+      // Parse response to get created submission ID
+      let created = {};
+      try { created = await response.json(); } catch (_) {}
+      // debug: ตรวจรูปแบบ response จาก backend
+      console.log('[Addmember] POST response body:', created);
+
+      // รองรับหลายรูปแบบ: { id }, { _id }, { data: { id } }, { submission: { id } }
+      const submissionId =
+        created.id ??
+        created._id ??
+        created.data?.id ??
+        created.data?._id ??
+        created.submission?.id ??
+        created.submission?._id ??
+        null; // null = ไม่ได้ ID จริง → fallback ใช้ name/email matching แทน
+
+      // Save submission to localStorage so Profile can show it
+      const myList = JSON.parse(localStorage.getItem('mySubmissions') || '[]');
+      myList.unshift({
+        id: submissionId !== null ? String(submissionId) : String(Date.now()),
+        name: payload.name,
+        project: payload.project,
+        country: payload.country,
+        location: payload.location,
+        email: payload.email,
+        tags: payload.tags,
+        created_at: created.created_at || new Date().toISOString(),
+        status: 'pending',
+      });
+      localStorage.setItem('mySubmissions', JSON.stringify(myList));
+
       setSuccess(true);
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {

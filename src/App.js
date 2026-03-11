@@ -8,6 +8,9 @@ import Card from "./component/Card";
 import Addmember from "./page/Addmember";
 import Requirement from "./page/Admin/Requirement";
 import Approve from "./page/Admin/Approve";
+import Managemember from "./page/Admin/Managemember";
+import Manageuser from "./page/Admin/Manageuser";
+import Profile from "./page/profile";
 import './App.css';
 
 function App() {
@@ -22,6 +25,9 @@ function App() {
         <Route path="/addmember" element={<Addmember />} />
         <Route path="/requirements" element={<Requirement />} />
         <Route path="/approve/:id" element={<Approve />} />
+        <Route path="/manage-members" element={<Managemember />} />
+        <Route path="/manage-users" element={<Manageuser />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
   );
 }

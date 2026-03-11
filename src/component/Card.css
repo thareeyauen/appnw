@@ -86,7 +86,7 @@
 }
 
 .tag-button {
-  background: #4285f4;
+  background: #E53935;
   color: white;
   border: none;
   border-radius: 20px;
@@ -148,7 +148,7 @@
 
 /* กรณีไม่มี type (default) */
 .tag-button {
-  background: #4285f4;
+  background: #E53935;
   color: white;
   border: none;
   border-radius: 20px;
