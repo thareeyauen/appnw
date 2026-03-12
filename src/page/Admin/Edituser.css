@@ -1,0 +1,379 @@
+/* ── Page ── */
+.eu-page {
+  min-height: 100vh;
+  background: #F0EDE4;
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 48px;
+}
+
+.eu-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #1a1a1a;
+}
+
+/* ── Header ── */
+.eu-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 24px 20px 16px 20px;
+  gap: 12px;
+  align-self: flex-start;
+}
+
+.eu-back-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.eu-back-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.eu-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  font-style: italic;
+  color: #1a1a1a;
+}
+
+/* ── Card ── */
+.eu-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px 24px;
+  width: calc(100% - 40px);
+  max-width: 440px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Field ── */
+.eu-field {
+  margin-bottom: 20px;
+}
+
+.eu-field:last-child {
+  margin-bottom: 0;
+}
+
+.eu-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.eu-input {
+  width: 100%;
+  padding: 13px 16px;
+  background: #ece9e5;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+  transition: background 0.2s ease;
+}
+
+.eu-input:focus {
+  background: #B8D4E8;
+}
+
+/* ── Select (Type of user) ── */
+.eu-select {
+  padding: 8px 32px 8px 14px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  outline: none;
+  appearance: auto;
+}
+
+/* ── Reset Password button ── */
+.eu-reset-btn {
+  width: 100%;
+  padding: 14px;
+  background: #bf4343;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.eu-reset-btn:hover {
+  background: #a92118;
+  color: #1a1a1a;
+}
+
+/* ── Action Buttons ── */
+.eu-action-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.eu-done-btn {
+  padding: 13px 36px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.eu-done-btn:hover:not(:disabled) {
+  background: #388E3C;
+}
+
+.eu-done-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.eu-delete-btn {
+  padding: 13px 36px;
+  background: #E53935;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.eu-delete-btn:hover:not(:disabled) {
+  background: #a93226;
+}
+
+.eu-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Random Password Modal ── */
+.eu-pw-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 32px 28px 28px 28px;
+  width: 320px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.eu-pw-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #e53935;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+.eu-pw-close:hover {
+  opacity: 0.7;
+}
+
+.eu-pw-title {
+  margin: 0 0 24px 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.eu-pw-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.eu-pw-box {
+  background: #FDD835;
+  border-radius: 14px;
+  padding: 14px 22px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 2px;
+  flex: 1;
+}
+
+.eu-pw-copy {
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease;
+}
+
+.eu-pw-copy:hover {
+  border-color: #aaa;
+}
+
+.eu-pw-refresh {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.eu-pw-refresh:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.eu-pw-save-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s ease;
+}
+
+.eu-pw-save-btn:hover {
+  background: #388E3C;
+}
+
+.eu-pw-confirmed {
+  display: block;
+  font-size: 13px;
+  color: #2e7d32;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ── Confirm Modals ── */
+.eu-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.eu-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.eu-modal-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+}
+
+.eu-modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.eu-modal-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #f0f0f0;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.eu-modal-cancel:hover {
+  background: #e0e0e0;
+}
+
+.eu-modal-confirm {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.eu-modal-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.eu-modal-confirm-save {
+  background: #4CAF50;
+  color: white;
+}
+
+.eu-modal-confirm-save:hover:not(:disabled) {
+  background: #388E3C;
+}
+
+.eu-modal-confirm-delete {
+  background: #E53935;
+  color: white;
+}
+
+.eu-modal-confirm-delete:hover:not(:disabled) {
+  background: #a93226;
+}

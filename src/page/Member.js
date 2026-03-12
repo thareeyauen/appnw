@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react'; // 1. เพิ่ม useSta
 import { useNavigate, useParams } from 'react-router-dom';
 import './Member.css';
 
+const TAG_COLORS = {
+  'Open Data':            { background: '#7BAE8E', color: 'white' },
+  'Public Procurement':   { background: '#D97757', color: 'white' },
+  'Whistle Blower':       { background: '#D4A96A', color: 'white' },
+  'Business integrity':   { background: '#7A9BB5', color: 'white' },
+};
+const getTagStyle = (label) => TAG_COLORS[label] || { background: '#cab8d9', color: '#1a1a1a' };
+
 const Member = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // รับ id จาก URL เช่น /member/1
@@ -108,7 +116,7 @@ const Member = () => {
             <div className="tag-container">
               {/* วนลูปแสดง Tags จริงจาก API */}
               {member.tags.map((tag, index) => (
-                <span key={index} className={`tag ${index === 0 ? 'tag-primary' : 'tag-secondary'}`}>
+                <span key={index} className={`tag ${index === 0 ? 'tag-primary' : 'tag-secondary'}`} style={getTagStyle(tag.label)}>
                   {tag.label}
                 </span>
               ))}

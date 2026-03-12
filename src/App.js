@@ -10,6 +10,9 @@ import Requirement from "./page/Admin/Requirement";
 import Approve from "./page/Admin/Approve";
 import Managemember from "./page/Admin/Managemember";
 import Manageuser from "./page/Admin/Manageuser";
+import Editmember from "./page/Admin/Editmember";
+import Edituser from "./page/Admin/Edituser";
+import Newuser from "./page/Admin/Newuser";
 import Profile from "./page/profile";
 import './App.css';
 
@@ -26,7 +29,10 @@ function App() {
         <Route path="/requirements" element={<Requirement />} />
         <Route path="/approve/:id" element={<Approve />} />
         <Route path="/manage-members" element={<Managemember />} />
+        <Route path="/manage-members/:id" element={<Editmember />} />
         <Route path="/manage-users" element={<Manageuser />} />
+        <Route path="/manage-users/new" element={<Newuser />} />
+        <Route path="/manage-users/:id" element={<Edituser />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
   );

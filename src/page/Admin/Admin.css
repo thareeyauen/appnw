@@ -1,9 +1,7 @@
 .admin-page {
   min-height: 100vh;
   background: #F5F0E8;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
 }
 
 /* Header */

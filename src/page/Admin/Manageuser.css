@@ -1,7 +1,7 @@
 .mu-page {
   min-height: 100vh;
   background: #F5F0E8;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
 }
 
 /* ── Header ── */
@@ -61,57 +61,21 @@
 .mu-table-wrapper {
   width: 100%;
   border-radius: 14px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   margin-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mu-table {
   width: 100%;
+  min-width: 380px;
   border-collapse: collapse;
   table-layout: fixed;
   background: transparent;
 }
 
-/* thead ไม่ scroll */
-.mu-table thead {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-/* tbody scroll เดี่ยว */
-.mu-table tbody {
-  display: block;
-  max-height: 520px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #584c46 transparent;
-}
-
-.mu-table tbody::-webkit-scrollbar {
-  width: 5px;
-}
-
-.mu-table tbody::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.mu-table tbody::-webkit-scrollbar-thumb {
-  background: #584c46;
-  border-radius: 10px;
-}
-
-.mu-table tbody::-webkit-scrollbar-thumb:hover {
-  background: #3e3530;
-}
-
-/* แถวใน tbody ต้อง display: table เพื่อให้ column ตรงกับ thead */
-.mu-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
 
 .mu-th {
   background: #5B9BD5;
@@ -123,17 +87,17 @@
 }
 
 .mu-th-no {
-  width: 52px;
+  width: 44px;
   text-align: center;
 }
 
 .mu-th-type {
-  width: 130px;
+  width: 80px;
 }
 
 .mu-th-manage {
   text-align: center;
-  width: 120px;
+  width: 108px;
 }
 
 .mu-tr {
@@ -151,18 +115,24 @@
 }
 
 .mu-td-no {
-  width: 52px;
+  width: 44px;
   text-align: center;
   color: #555;
 }
 
+.mu-td-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .mu-td-type {
-  width: 130px;
+  width: 80px;
   color: #555;
 }
 
 .mu-td-manage {
-  width: 120px;
+  width: 108px;
   text-align: center;
 }
 
@@ -234,26 +204,20 @@
   margin: 4px 0;
 }
 
-/* ── SAVE button ── */
-.mu-save-btn {
-  padding: 14px 56px;
+/* ── New User button ── */
+.mu-new-btn {
+  padding: 13px 32px;
   background: #1a1a1a;
   color: #ffffff;
   border: none;
-  border-radius: 16px;
-  font-size: 16px;
+  border-radius: 30px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 2px;
   cursor: pointer;
   margin-top: 8px;
   transition: background 0.2s ease;
 }
 
-.mu-save-btn:hover {
+.mu-new-btn:hover {
   background: #333;
-}
-
-.mu-save-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }

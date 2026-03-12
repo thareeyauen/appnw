@@ -2,6 +2,14 @@ import React from 'react';
 import './Card.css';
 import { Link } from 'react-router-dom'; // ✅ แก้จาก link เป็น Link (ตัวพิมพ์ใหญ่)
 
+const TAG_COLORS = {
+  'Open Data':            { background: '#7BAE8E', color: 'white' },
+  'Public Procurement':   { background: '#D97757', color: 'white' },
+  'Whistle Blower':       { background: '#D4A96A', color: 'white' },
+  'Business integrity':   { background: '#7A9BB5', color: 'white' },
+};
+const getTagStyle = (label) => TAG_COLORS[label] || { background: '#cab8d9', color: '#1a1a1a' };
+
 const Card = ({
   id,
   name = "XXXXXXXXXXXXXXXXXXX",
@@ -56,7 +64,7 @@ const Card = ({
 
       <div className="card-tags">
         {tags.map((tag, index) => (
-          <button key={index} className="tag-button">
+          <button key={index} className="tag-button" style={getTagStyle(tag.label)}>
             {tag.label}
           </button>
         ))}

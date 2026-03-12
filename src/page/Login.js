@@ -11,7 +11,8 @@ function Login() {
   };
 
   return (
-            <div className="login-container">
+    <div className="login-page">
+      <div className="login-container">
       <h1 className="title">
         Network <br /> App
       </h1>
@@ -29,6 +30,7 @@ function Login() {
       <button className="sign-in-btn" onClick={handleLogin}>
         Sign In
       </button>
+    </div>
     </div>
   );
 }

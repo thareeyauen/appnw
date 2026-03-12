@@ -6,9 +6,6 @@ const Manageuser = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
   const MOCK_USERS = [
     { id: 1, name: 'Saranchanok', email: 'saranchanok@hand.co.th', type: 'User' },
     { id: 2, name: 'Admin01',     email: 'admin01@hand.co.th',     type: 'Admin' },
@@ -31,21 +28,7 @@ const Manageuser = () => {
     navigate(`/manage-users/${id}`);
   };
 
-  const handleSave = async () => {
-    setSaving(true);
-    setError(null);
-    setSuccess(false);
-    try {
-      await new Promise(r => setTimeout(r, 600));
-      setSuccess(true);
-    } catch (err) {
-      setError('เกิดข้อผิดพลาดในการบันทึก');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
+return (
     <div className="mu-page">
       {/* Header */}
       <div className="mu-header">
@@ -106,11 +89,8 @@ const Manageuser = () => {
         )}
 
 
-        {error && <p className="mu-error">{error}</p>}
-        {success && <p className="mu-success">บันทึกสำเร็จ!</p>}
-
-        <button className="mu-save-btn" onClick={handleSave} disabled={saving}>
-          {saving ? 'กำลังบันทึก...' : 'SAVE'}
+        <button className="mu-new-btn" onClick={() => navigate('/manage-users/new')}>
+          + New User
         </button>
       </div>
     </div>

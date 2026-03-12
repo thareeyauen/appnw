@@ -1,0 +1,272 @@
+/* Avatar upload */
+.em-avatar-label {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 32px auto;
+  cursor: pointer;
+}
+
+.em-avatar-label .profile-avatar {
+  position: relative;
+  overflow: hidden;
+}
+
+.em-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.em-avatar-label:hover .em-avatar-overlay {
+  opacity: 1;
+}
+
+/* Name Card upload */
+.em-namecard-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.em-namecard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border-radius: 12px;
+  padding: 12px 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+
+.em-namecard-btn:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.em-namecard-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.em-namecard-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: #c0392b;
+  white-space: nowrap;
+}
+
+/* Expertise multi-select pills */
+.expertise-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.expertise-pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid #e0ddd8;
+  background: #f5f2ee;
+  color: #666;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  letter-spacing: 0.2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+}
+
+.expertise-pill:hover {
+  border-color: #bbb;
+  background: #ece8e2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.expertise-pill--active {
+  border-color: transparent;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
+/* Tag editing */
+.em-tag-remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 6px;
+  padding: 0 2px;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.em-tag-remove:hover {
+  opacity: 1;
+}
+
+.em-tag-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.em-tag-input {
+  flex: 1;
+  margin-bottom: 0 !important;
+}
+
+.em-tag-add-btn {
+  background: #5b7cee;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 42px;
+  font-size: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.em-tag-add-btn:hover {
+  background: #4a6bdd;
+}
+
+/* Action Buttons */
+.em-action-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+.em-save-btn {
+  flex: 1;
+  padding: 14px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.em-save-btn:hover:not(:disabled) {
+  background: #388E3C;
+}
+
+.em-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.em-delete-btn {
+  flex: 1;
+  padding: 14px;
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.em-delete-btn:hover:not(:disabled) {
+  background: #c62828;
+}
+
+.em-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Delete Confirm Modal */
+.em-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.em-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.em-modal-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+}
+
+.em-modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.em-modal-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #f0f0f0;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.em-modal-cancel:hover {
+  background: #e0e0e0;
+}
+
+.em-modal-confirm {
+  flex: 1;
+  padding: 12px;
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.em-modal-confirm:hover:not(:disabled) {
+  background: #c62828;
+}
+
+.em-modal-confirm-save {
+  background: #4CAF50;
+}
+
+.em-modal-confirm-save:hover:not(:disabled) {
+  background: #388E3C;
+}
+
+.em-modal-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

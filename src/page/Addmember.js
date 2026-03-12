@@ -6,9 +6,16 @@ const EXPERTISE_OPTIONS = [
   'Open Data',
   'Public Procurement',
   'Whistle Blower',
-  'Business Integrity',
-  'Other',
+  'Business integrity',
 ];
+
+const TAG_COLORS = {
+  'Open Data':            { background: '#7BAE8E', color: 'white' },
+  'Public Procurement':   { background: '#D97757', color: 'white' },
+  'Whistle Blower':       { background: '#D4A96A', color: 'white' },
+  'Business integrity':   { background: '#7A9BB5', color: 'white' },
+};
+const getTagStyle = (label) => TAG_COLORS[label] || { background: '#cab8d9', color: '#1a1a1a' };
 
 const COUNTRY_OPTIONS = [
   'Afghanistan', 'Albania', 'Algeria', 'Argentina', 'Armenia', 'Australia',
@@ -38,7 +45,7 @@ const Addmember = () => {
     name_th: '',
     location: '',
     email: '',
-    tags: '',
+    tags: [],
     tagsOther: '',
     network: '',
     project: '',
@@ -64,6 +71,15 @@ const Addmember = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const toggleTag = (opt) => {
+    setFormData(prev => {
+      const tags = prev.tags.includes(opt)
+        ? prev.tags.filter(t => t !== opt)
+        : [...prev.tags, opt];
+      return { ...prev, tags };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -79,8 +95,11 @@ const Addmember = () => {
 
     setSubmitting(true);
 
-    const tagLabel = formData.tags === 'Other' ? formData.tagsOther : formData.tags;
-    const tagsArray = tagLabel ? [{ label: tagLabel }] : [];
+    const tagsArray = formData.tags.flatMap(label =>
+      label === 'Other'
+        ? (formData.tagsOther.trim() ? [{ label: formData.tagsOther.trim() }] : [])
+        : [{ label }]
+    );
 
     const payload = {
       name: formData.name,
@@ -290,18 +309,28 @@ const Addmember = () => {
 
             <div className="form-group">
               <label className="form-label">Expertise / ความเชี่ยวชาญ</label>
-              <select
-                name="tags"
-                className="form-input form-select"
-                value={formData.tags}
-                onChange={handleChange}
-              >
-                <option value="">-- เลือกความเชี่ยวชาญ --</option>
+              <div className="expertise-pills">
                 {EXPERTISE_OPTIONS.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
+                  <button
+                    key={opt}
+                    type="button"
+                    className={`expertise-pill${formData.tags.includes(opt) ? ' expertise-pill--active' : ''}`}
+                    style={formData.tags.includes(opt) ? getTagStyle(opt) : {}}
+                    onClick={() => toggleTag(opt)}
+                  >
+                    {opt}
+                  </button>
                 ))}
-              </select>
-              {formData.tags === 'Other' && (
+                <button
+                  type="button"
+                  className={`expertise-pill${formData.tags.includes('Other') ? ' expertise-pill--active' : ''}`}
+                  style={formData.tags.includes('Other') ? { background: '#cab8d9', color: '#1a1a1a', borderColor: 'transparent' } : {}}
+                  onClick={() => toggleTag('Other')}
+                >
+                  Other
+                </button>
+              </div>
+              {formData.tags.includes('Other') && (
                 <input
                   type="text"
                   name="tagsOther"

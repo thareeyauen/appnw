@@ -1,7 +1,7 @@
 .mm-page {
   min-height: 100vh;
   background: #F5F0E8 ;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
 }
 
 /* ── Header ── */
@@ -228,7 +228,7 @@
 /* ── SAVE button ── */
 .mm-save-btn {
   padding: 14px 56px;
-  background: #1a1a1a;
+  background: #4CAF50;
   color: #ffffff;
   border: none;
   border-radius: 16px;
@@ -241,7 +241,7 @@
 }
 
 .mm-save-btn:hover {
-  background: #333;
+  background: #388E3C;
 }
 
 .mm-save-btn:disabled {

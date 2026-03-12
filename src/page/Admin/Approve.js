@@ -6,9 +6,16 @@ const EXPERTISE_OPTIONS = [
   'Open Data',
   'Public Procurement',
   'Whistle Blower',
-  'Business Integrity',
-  'Other',
+  'Business integrity',
 ];
+
+const TAG_COLORS = {
+  'Open Data':            { background: '#7BAE8E', color: 'white' },
+  'Public Procurement':   { background: '#D97757', color: 'white' },
+  'Whistle Blower':       { background: '#D4A96A', color: 'white' },
+  'Business integrity':   { background: '#7A9BB5', color: 'white' },
+};
+const getTagStyle = (label) => TAG_COLORS[label] || { background: '#cab8d9', color: '#1a1a1a' };
 
 const COUNTRY_OPTIONS = [
   'Afghanistan', 'Albania', 'Algeria', 'Argentina', 'Armenia', 'Australia',
@@ -57,7 +64,7 @@ const Approve = () => {
     name_th: '',
     location: '',
     email: '',
-    tags: '',
+    tags: [],
     tagsOther: '',
     network: '',
     project: '',
@@ -80,20 +87,18 @@ const Approve = () => {
       .then((data) => {
         console.log('[Approve] API response:', data);
         setMember(data);
-        const tagLabel =
-          Array.isArray(data.tags) && data.tags.length > 0
-            ? data.tags[0].label
-            : typeof data.tags === 'string'
-            ? data.tags
-            : '';
-        const isKnownTag = EXPERTISE_OPTIONS.slice(0, -1).includes(tagLabel);
+        const allLabels = Array.isArray(data.tags)
+          ? data.tags.map(t => (typeof t === 'string' ? t : t.label || ''))
+          : typeof data.tags === 'string' && data.tags ? [data.tags] : [];
+        const selectedKnown = allLabels.filter(l => EXPERTISE_OPTIONS.includes(l));
+        const customLabels = allLabels.filter(l => l && !EXPERTISE_OPTIONS.includes(l));
         setFormData({
           name: data.name || '',
           name_th: data.name_th || '',
           location: data.location || '',
           email: data.email || '',
-          tags: isKnownTag ? tagLabel : tagLabel ? 'Other' : '',
-          tagsOther: isKnownTag ? '' : tagLabel,
+          tags: [...selectedKnown, ...(customLabels.length > 0 ? ['Other'] : [])],
+          tagsOther: customLabels.join(', '),
           network: data.network || '',
           project: data.project || '',
           project_th: data.project_th || '',
@@ -117,12 +122,24 @@ const Approve = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const toggleTag = (opt) => {
+    setFormData(prev => {
+      const tags = prev.tags.includes(opt)
+        ? prev.tags.filter(t => t !== opt)
+        : [...prev.tags, opt];
+      return { ...prev, tags };
+    });
+  };
+
   const handleUpload = async () => {
     setError(null);
     setSubmitting(true);
 
-    const tagLabel = formData.tags === 'Other' ? formData.tagsOther : formData.tags;
-    const tagsArray = tagLabel ? [{ label: tagLabel }] : [];
+    const tagsArray = formData.tags.flatMap(label =>
+      label === 'Other'
+        ? (formData.tagsOther.trim() ? [{ label: formData.tagsOther.trim() }] : [])
+        : [{ label }]
+    );
 
     const payload = {
       name: formData.name,
@@ -297,18 +314,28 @@ const Approve = () => {
 
           <div className="approve-form-group">
             <label className="approve-label">Expertise / ความเชี่ยวชาญ</label>
-            <select
-              name="tags"
-              className="approve-input approve-select"
-              value={formData.tags}
-              onChange={handleChange}
-            >
-              <option value="">-- เลือกความเชี่ยวชาญ --</option>
+            <div className="expertise-pills">
               {EXPERTISE_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
+                <button
+                  key={opt}
+                  type="button"
+                  className={`expertise-pill${formData.tags.includes(opt) ? ' expertise-pill--active' : ''}`}
+                  style={formData.tags.includes(opt) ? getTagStyle(opt) : {}}
+                  onClick={() => toggleTag(opt)}
+                >
+                  {opt}
+                </button>
               ))}
-            </select>
-            {formData.tags === 'Other' && (
+              <button
+                type="button"
+                className={`expertise-pill${formData.tags.includes('Other') ? ' expertise-pill--active' : ''}`}
+                style={formData.tags.includes('Other') ? { background: '#cab8d9', color: '#1a1a1a', borderColor: 'transparent' } : {}}
+                onClick={() => toggleTag('Other')}
+              >
+                Other
+              </button>
+            </div>
+            {formData.tags.includes('Other') && (
               <input
                 type="text"
                 name="tagsOther"

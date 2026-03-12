@@ -14,7 +14,7 @@ const formatDate = (dateStr) => {
 
 const STATUS_LABEL = {
   pending:  { text: 'รอดำเนินการ', cls: 'status-pending' },
-  approved: { text: 'Upload แล้ว',  cls: 'status-approved' },
+  approved: { text: 'อนุมัติแล้ว',  cls: 'status-approved' },
   rejected: { text: 'ถูกปฏิเสธ',   cls: 'status-rejected' },
 };
 
@@ -77,10 +77,12 @@ const Profile = () => {
         }
       });
 
-      const updated = stored.map(s => {
-        if (s.status !== 'pending') return s; // resolved แล้ว ไม่แตะ
+      // อ่าน localStorage ใหม่ (อาจถูก handleCancel แก้ไขระหว่างที่ fetch อยู่)
+      const current = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+      const updated = current.map(s => {
+        if (s.status !== 'pending') return s;
         const apiStatus = statusMap[String(s.id)];
-        if (!apiStatus) return s; // API ไม่ตอบ → คง pending ไว้
+        if (!apiStatus) return s;
         return { ...s, status: apiStatus };
       });
 
@@ -89,20 +91,16 @@ const Profile = () => {
     }).finally(() => setLoading(false));
   }, []);
 
-  const handleCancel = async (id) => {
-    try {
-      await fetch(`http://localhost:3000/api/submissions/${id}`, {
-        method: 'DELETE',
-      });
-    } catch (_) {
-      // best-effort — ลบออก localStorage ไม่ว่า API จะสำเร็จหรือไม่
-    } finally {
-      setRequests(prev => {
-        const updated = prev.filter(r => r.id !== id);
-        localStorage.setItem(LS_KEY, JSON.stringify(updated));
-        return updated;
-      });
-    }
+  const handleCancel = (id) => {
+    // อัปเดต UI ทันที ไม่รอ API
+    setRequests(prev => {
+      const updated = prev.filter(r => r.id !== id);
+      localStorage.setItem(LS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    // best-effort — แจ้ง backend ด้วย แต่ไม่ block UI
+    fetch(`http://localhost:3000/api/submissions/${id}`, { method: 'DELETE' })
+      .catch(() => {});
   };
 
   return (

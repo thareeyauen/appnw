@@ -1,7 +1,7 @@
 .profile-page {
   min-height: 100vh;
   background: #F0EDE4;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
 }
 
 /* ── Header ── */
@@ -303,7 +303,7 @@
 .modal-save-btn {
   align-self: center;
   padding: 13px 52px;
-  background: #1a1a1a;
+  background: #4CAF50;
   color: white;
   border: none;
   border-radius: 14px;
@@ -316,5 +316,5 @@
 }
 
 .modal-save-btn:hover {
-  background: #333;
+  background: #388E3C;
 }
