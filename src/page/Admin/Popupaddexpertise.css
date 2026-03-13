@@ -1,0 +1,121 @@
+/* Overlay */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+/* Box */
+.popup-box {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 24px 28px 24px;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
+}
+
+/* Header row */
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  font-style: italic;
+  color: #1a1a1a;
+}
+
+.popup-close-btn {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 2px solid #bf4343;
+  border-radius: 6px;
+  color: #bf4343;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.popup-close-btn:hover {
+  background: rgba(191, 67, 67, 0.08);
+}
+
+/* Label */
+.popup-label {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Input */
+.popup-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0dbd4;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1a1a1a;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.popup-input:focus {
+  border-color: #bf4343;
+}
+
+.popup-input::placeholder {
+  color: #aaa;
+}
+
+/* Error */
+.popup-error {
+  color: #c62828;
+  font-size: 12px;
+  margin: 8px 0 0 0;
+}
+
+/* Submit */
+.popup-submit-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 13px;
+  background: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: inherit;
+}
+
+.popup-submit-btn:hover {
+  background: #bf4343;
+}
+
+.popup-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

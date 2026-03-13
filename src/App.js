@@ -13,6 +13,9 @@ import Manageuser from "./page/Admin/Manageuser";
 import Editmember from "./page/Admin/Editmember";
 import Edituser from "./page/Admin/Edituser";
 import Newuser from "./page/Admin/Newuser";
+import Datamanagement from "./page/Admin/Datamanagement";
+import AddExpertise from "./page/Admin/AddExpertise";
+import Typeuser from "./page/Admin/Typeuser";
 import Profile from "./page/profile";
 import './App.css';
 
@@ -33,6 +36,9 @@ function App() {
         <Route path="/manage-users" element={<Manageuser />} />
         <Route path="/manage-users/new" element={<Newuser />} />
         <Route path="/manage-users/:id" element={<Edituser />} />
+        <Route path="/data-management" element={<Datamanagement />} />
+        <Route path="/add-expertise" element={<AddExpertise />} />
+        <Route path="/type-of-users" element={<Typeuser />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
   );
