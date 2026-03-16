@@ -1,13 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Addmember.css';
-
-const EXPERTISE_OPTIONS = [
-  'Open Data',
-  'Public Procurement',
-  'Whistle Blower',
-  'Business integrity',
-];
 
 const TAG_COLORS = {
   'Open Data':            { background: '#7BAE8E', color: 'white' },
@@ -56,11 +49,19 @@ const Addmember = () => {
     note: '',
   });
 
+  const [expertiseOptions, setExpertiseOptions] = useState([]);
   const [profileImage, setProfileImage] = useState(null);
   const [nameCard, setNameCard] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/expertise')
+      .then(res => res.json())
+      .then(data => setExpertiseOptions(Array.isArray(data) ? data.map(e => e.label) : []))
+      .catch(() => {});
+  }, []);
 
   const handleBack = () => {
     navigate('/');
@@ -310,7 +311,7 @@ const Addmember = () => {
             <div className="form-group">
               <label className="form-label">Expertise / ความเชี่ยวชาญ</label>
               <div className="expertise-pills">
-                {EXPERTISE_OPTIONS.map((opt) => (
+                {expertiseOptions.map((opt) => (
                   <button
                     key={opt}
                     type="button"

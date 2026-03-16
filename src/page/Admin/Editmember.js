@@ -3,12 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../Member.css';
 import './Editmember.css';
 
-const EXPERTISE_OPTIONS = [
-  'Open Data',
-  'Public Procurement',
-  'Whistle Blower',
-  'Business integrity',
-];
 
 const TAG_COLORS = {
   'Open Data':            { background: '#7BAE8E', color: 'white' },
@@ -30,6 +24,7 @@ const Editmember = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [expertiseOptions, setExpertiseOptions] = useState([]);
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -40,6 +35,13 @@ const Editmember = () => {
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [nameCardPreview, setNameCardPreview] = useState(null);
   const [nameCardFileName, setNameCardFileName] = useState('');
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/expertise')
+      .then(res => res.json())
+      .then(data => setExpertiseOptions(Array.isArray(data) ? data.map(e => e.label) : []))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/people/${id}`)
@@ -240,7 +242,7 @@ const Editmember = () => {
           <div className="form-group">
             <label className="form-label">Expertise / ความเชี่ยวชาญ</label>
             <div className="expertise-pills">
-              {EXPERTISE_OPTIONS.map(opt => {
+              {expertiseOptions.map(opt => {
                 const active = (member.tags || []).some(t => t.label === opt);
                 return (
                   <button
@@ -256,10 +258,10 @@ const Editmember = () => {
               })}
             </div>
             {/* Custom (non-predefined) tags */}
-            {(member.tags || []).filter(t => !EXPERTISE_OPTIONS.includes(t.label)).length > 0 && (
+            {(member.tags || []).filter(t => !expertiseOptions.includes(t.label)).length > 0 && (
               <div className="tag-container" style={{ marginTop: '10px' }}>
                 {(member.tags || []).map((tag, index) =>
-                  EXPERTISE_OPTIONS.includes(tag.label) ? null : (
+                  expertiseOptions.includes(tag.label) ? null : (
                     <span key={index} className="tag" style={getTagStyle(tag.label)}>
                       {tag.label}
                       <button className="em-tag-remove" onClick={() => handleRemoveTag(index)}>×</button>

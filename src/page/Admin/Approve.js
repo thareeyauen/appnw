@@ -2,12 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './Approve.css';
 
-const EXPERTISE_OPTIONS = [
-  'Open Data',
-  'Public Procurement',
-  'Whistle Blower',
-  'Business integrity',
-];
 
 const TAG_COLORS = {
   'Open Data':            { background: '#7BAE8E', color: 'white' },
@@ -52,6 +46,7 @@ const Approve = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [expertiseOptions, setExpertiseOptions] = useState([]);
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -79,6 +74,13 @@ const Approve = () => {
   const [nameCardName, setNameCardName] = useState('');
 
   useEffect(() => {
+    fetch('http://localhost:3000/api/expertise')
+      .then(res => res.json())
+      .then(data => setExpertiseOptions(Array.isArray(data) ? data.map(e => e.label) : []))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
     fetch(`http://localhost:3000/api/admin/submissions/${id}`)
       .then((res) => {
         console.log('[Approve] HTTP status:', res.status);
@@ -87,26 +89,6 @@ const Approve = () => {
       .then((data) => {
         console.log('[Approve] API response:', data);
         setMember(data);
-        const allLabels = Array.isArray(data.tags)
-          ? data.tags.map(t => (typeof t === 'string' ? t : t.label || ''))
-          : typeof data.tags === 'string' && data.tags ? [data.tags] : [];
-        const selectedKnown = allLabels.filter(l => EXPERTISE_OPTIONS.includes(l));
-        const customLabels = allLabels.filter(l => l && !EXPERTISE_OPTIONS.includes(l));
-        setFormData({
-          name: data.name || '',
-          name_th: data.name_th || '',
-          location: data.location || '',
-          email: data.email || '',
-          tags: [...selectedKnown, ...(customLabels.length > 0 ? ['Other'] : [])],
-          tagsOther: customLabels.join(', '),
-          network: data.network || '',
-          project: data.project || '',
-          project_th: data.project_th || '',
-          position: data.position || '',
-          position_th: data.position_th || '',
-          country: data.country || '',
-          note: data.note || '',
-        });
         if (data.avatar) setProfileImage(data.avatar);
         if (data.nameCard) setNameCardName(data.nameCard);
         setLoading(false);
@@ -116,6 +98,31 @@ const Approve = () => {
         setLoading(false);
       });
   }, [id]);
+
+  // Process tags after both member and expertiseOptions are loaded
+  useEffect(() => {
+    if (!member) return;
+    const allLabels = Array.isArray(member.tags)
+      ? member.tags.map(t => (typeof t === 'string' ? t : t.label || ''))
+      : typeof member.tags === 'string' && member.tags ? [member.tags] : [];
+    const selectedKnown = allLabels.filter(l => expertiseOptions.includes(l));
+    const customLabels = allLabels.filter(l => l && !expertiseOptions.includes(l));
+    setFormData({
+      name: member.name || '',
+      name_th: member.name_th || '',
+      location: member.location || '',
+      email: member.email || '',
+      tags: [...selectedKnown, ...(customLabels.length > 0 ? ['Other'] : [])],
+      tagsOther: customLabels.join(', '),
+      network: member.network || '',
+      project: member.project || '',
+      project_th: member.project_th || '',
+      position: member.position || '',
+      position_th: member.position_th || '',
+      country: member.country || '',
+      note: member.note || '',
+    });
+  }, [member, expertiseOptions]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -315,7 +322,7 @@ const Approve = () => {
           <div className="approve-form-group">
             <label className="approve-label">Expertise / ความเชี่ยวชาญ</label>
             <div className="expertise-pills">
-              {EXPERTISE_OPTIONS.map((opt) => (
+              {expertiseOptions.map((opt) => (
                 <button
                   key={opt}
                   type="button"

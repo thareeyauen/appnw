@@ -247,6 +247,77 @@
   background: #bf4343;
 }
 
+/* Delete confirmation modal */
+.tu-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.tu-modal {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 24px 24px 24px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
+}
+
+.tu-modal-text {
+  margin: 0 0 24px 0;
+  font-size: 16px;
+  color: #1a1a1a;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.tu-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.tu-modal-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #F5F0E8;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.tu-modal-cancel:hover {
+  background: #e8e3db;
+}
+
+.tu-modal-confirm {
+  flex: 1;
+  padding: 12px;
+  background: #bf4343;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.tu-modal-confirm:hover {
+  background: #a33636;
+}
+
 @media (max-width: 768px) {
   .tu-header {
     padding: 16px 16px 0 16px;

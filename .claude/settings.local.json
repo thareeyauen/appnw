@@ -4,7 +4,8 @@
       "Bash(ls -la /c/Users/Thare/appnw/*.js)",
       "Bash(find /c/Users/Thare/backend_appnw -type f ! -path */node_modules/*)",
       "Bash(\"c:\\\\Users\\\\Thare\\\\appnw\\\\src\\\\page\\\\Admin\\\\Edituser.js\")",
-      "Bash(\"c:\\\\Users\\\\Thare\\\\appnw\\\\src\\\\page\\\\Admin\\\\Edituser.css\")"
+      "Bash(\"c:\\\\Users\\\\Thare\\\\appnw\\\\src\\\\page\\\\Admin\\\\Edituser.css\")",
+      "Bash(xargs grep:*)"
     ]
   }
 }

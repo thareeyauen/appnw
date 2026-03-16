@@ -17,6 +17,7 @@ const AddExpertise = () => {
   const [search, setSearch] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -30,12 +31,18 @@ const AddExpertise = () => {
     e.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = async (id) => {
+  const handleDeleteClick = (item) => {
+    setDeleteTarget(item);
+  };
+
+  const confirmDelete = async () => {
     try {
-      await fetch(`http://localhost:3000/api/expertise/${id}`, { method: 'DELETE' });
-      setExpertiseList(prev => prev.filter(e => e.id !== id));
+      await fetch(`http://localhost:3000/api/expertise/${deleteTarget.id}`, { method: 'DELETE' });
+      setExpertiseList(prev => prev.filter(e => e.id !== deleteTarget.id));
     } catch {
       setError('ลบไม่สำเร็จ');
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -103,7 +110,7 @@ const AddExpertise = () => {
             {filtered.map(item => (
               <div key={item.id} className="ae-list-item">
                 <span className="ae-item-label">{item.label}</span>
-                <button className="ae-delete-btn" onClick={() => handleDelete(item.id)}>
+                <button className="ae-delete-btn" onClick={() => handleDeleteClick(item)}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -120,10 +127,6 @@ const AddExpertise = () => {
         </div>
 
         {error && <p className="ae-error">{error}</p>}
-
-        <button className="ae-submit-btn" onClick={() => navigate('/data-management')}>
-          Submit
-        </button>
       </div>
 
       {showPopup && (
@@ -131,6 +134,24 @@ const AddExpertise = () => {
           onClose={() => setShowPopup(false)}
           onAdd={handleAdd}
         />
+      )}
+
+      {deleteTarget && (
+        <div className="ae-modal-overlay" onClick={() => setDeleteTarget(null)}>
+          <div className="ae-modal" onClick={e => e.stopPropagation()}>
+            <p className="ae-modal-text">
+              ยืนยันการลบ <strong>"{deleteTarget.label}"</strong> ?
+            </p>
+            <div className="ae-modal-actions">
+              <button className="ae-modal-cancel" onClick={() => setDeleteTarget(null)}>
+                ยกเลิก
+              </button>
+              <button className="ae-modal-confirm" onClick={confirmDelete}>
+                ลบ
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

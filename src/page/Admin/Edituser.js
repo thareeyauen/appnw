@@ -12,6 +12,7 @@ const Edituser = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [userTypeOptions, setUserTypeOptions] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDoneConfirm, setShowDoneConfirm] = useState(false);
@@ -42,6 +43,13 @@ const Edituser = () => {
       setTimeout(() => setCopied(false), 2000);
     });
   };
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/user-types')
+      .then(res => res.json())
+      .then(data => setUserTypeOptions(Array.isArray(data) ? data.map(t => t.label) : []))
+      .catch(() => setUserTypeOptions(['User', 'Admin']));
+  }, []);
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/users/${id}`)
@@ -132,11 +140,12 @@ const Edituser = () => {
           <label className="eu-label">Type of user</label>
           <select
             className="eu-select"
-            value={user.type || 'User'}
+            value={user.type || ''}
             onChange={e => handleChange('type', e.target.value)}
           >
-            <option value="User">User</option>
-            <option value="Admin">Admin</option>
+            {userTypeOptions.map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
           </select>
         </div>
 

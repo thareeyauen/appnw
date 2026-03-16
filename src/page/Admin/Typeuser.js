@@ -17,6 +17,7 @@ const Typeuser = () => {
   const [search, setSearch] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -30,12 +31,18 @@ const Typeuser = () => {
     t.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = async (id) => {
+  const handleDeleteClick = (item) => {
+    setDeleteTarget(item);
+  };
+
+  const confirmDelete = async () => {
     try {
-      await fetch(`http://localhost:3000/api/user-types/${id}`, { method: 'DELETE' });
-      setTypeList(prev => prev.filter(t => t.id !== id));
+      await fetch(`http://localhost:3000/api/user-types/${deleteTarget.id}`, { method: 'DELETE' });
+      setTypeList(prev => prev.filter(t => t.id !== deleteTarget.id));
     } catch {
       setError('ลบไม่สำเร็จ');
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -103,7 +110,7 @@ const Typeuser = () => {
             {filtered.map(item => (
               <div key={item.id} className="tu-list-item">
                 <span className="tu-item-label">{item.label}</span>
-                <button className="tu-delete-btn" onClick={() => handleDelete(item.id)}>
+                <button className="tu-delete-btn" onClick={() => handleDeleteClick(item)}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -120,10 +127,6 @@ const Typeuser = () => {
         </div>
 
         {error && <p className="tu-error">{error}</p>}
-
-        <button className="tu-submit-btn" onClick={() => navigate('/data-management')}>
-          Submit
-        </button>
       </div>
 
       {showPopup && (
@@ -131,6 +134,24 @@ const Typeuser = () => {
           onClose={() => setShowPopup(false)}
           onAdd={handleAdd}
         />
+      )}
+
+      {deleteTarget && (
+        <div className="tu-modal-overlay" onClick={() => setDeleteTarget(null)}>
+          <div className="tu-modal" onClick={e => e.stopPropagation()}>
+            <p className="tu-modal-text">
+              ยืนยันการลบ <strong>"{deleteTarget.label}"</strong> ?
+            </p>
+            <div className="tu-modal-actions">
+              <button className="tu-modal-cancel" onClick={() => setDeleteTarget(null)}>
+                ยกเลิก
+              </button>
+              <button className="tu-modal-confirm" onClick={confirmDelete}>
+                ลบ
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
