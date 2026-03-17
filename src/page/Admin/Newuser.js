@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Newuser.css';
 
@@ -11,8 +11,23 @@ const generatePassword = () => {
 
 const Newuser = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', type: 'User' });
+  const [userTypeOptions, setUserTypeOptions] = useState([]);
+  const [form, setForm] = useState({ name: '', email: '', type: '' });
   const [password] = useState(generatePassword);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/user-types')
+      .then(res => res.json())
+      .then(data => {
+        const labels = Array.isArray(data) ? data.map(t => t.label) : ['User', 'Admin'];
+        setUserTypeOptions(labels);
+        setForm(prev => ({ ...prev, type: labels[0] || '' }));
+      })
+      .catch(() => {
+        setUserTypeOptions(['User', 'Admin']);
+        setForm(prev => ({ ...prev, type: 'User' }));
+      });
+  }, []);
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -88,8 +103,9 @@ const Newuser = () => {
             value={form.type}
             onChange={e => handleChange('type', e.target.value)}
           >
-            <option value="User">User</option>
-            <option value="Admin">Admin</option>
+            {userTypeOptions.map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
           </select>
         </div>
 
