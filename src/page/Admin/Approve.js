@@ -47,6 +47,7 @@ const Approve = () => {
   const { id } = useParams();
 
   const [expertiseOptions, setExpertiseOptions] = useState([]);
+  const [expertiseDescMap, setExpertiseDescMap] = useState({});
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -61,6 +62,7 @@ const Approve = () => {
     email: '',
     tags: [],
     tagsOther: '',
+    tagsOtherDesc: '',
     network: '',
     project: '',
     project_th: '',
@@ -76,7 +78,13 @@ const Approve = () => {
   useEffect(() => {
     fetch('http://localhost:3000/api/expertise')
       .then(res => res.json())
-      .then(data => setExpertiseOptions(Array.isArray(data) ? data.map(e => e.label) : []))
+      .then(data => {
+        if (!Array.isArray(data)) return;
+        setExpertiseOptions(data.map(e => e.label));
+        const map = {};
+        data.forEach(e => { map[e.label] = e.description || ''; });
+        setExpertiseDescMap(map);
+      })
       .catch(() => {});
   }, []);
 
@@ -102,11 +110,16 @@ const Approve = () => {
   // Process tags after both member and expertiseOptions are loaded
   useEffect(() => {
     if (!member) return;
-    const allLabels = Array.isArray(member.tags)
-      ? member.tags.map(t => (typeof t === 'string' ? t : t.label || ''))
+    const allTags = Array.isArray(member.tags) ? member.tags
       : typeof member.tags === 'string' && member.tags ? [member.tags] : [];
+    const allLabels = allTags.map(t => (typeof t === 'string' ? t : t.label || ''));
     const selectedKnown = allLabels.filter(l => expertiseOptions.includes(l));
-    const customLabels = allLabels.filter(l => l && !expertiseOptions.includes(l));
+    const customTags = allTags.filter(t => {
+      const l = typeof t === 'string' ? t : t.label || '';
+      return l && !expertiseOptions.includes(l);
+    });
+    const customLabels = customTags.map(t => typeof t === 'string' ? t : t.label || '');
+    const customDesc = customTags.map(t => typeof t === 'object' ? (t.description || '') : '').filter(Boolean).join(', ');
     setFormData({
       name: member.name || '',
       name_th: member.name_th || '',
@@ -114,6 +127,7 @@ const Approve = () => {
       email: member.email || '',
       tags: [...selectedKnown, ...(customLabels.length > 0 ? ['Other'] : [])],
       tagsOther: customLabels.join(', '),
+      tagsOtherDesc: customDesc,
       network: member.network || '',
       project: member.project || '',
       project_th: member.project_th || '',
@@ -144,7 +158,7 @@ const Approve = () => {
 
     const tagsArray = formData.tags.flatMap(label =>
       label === 'Other'
-        ? (formData.tagsOther.trim() ? [{ label: formData.tagsOther.trim() }] : [])
+        ? (formData.tagsOther.trim() ? [{ label: formData.tagsOther.trim(), description: formData.tagsOtherDesc.trim() }] : [])
         : [{ label }]
     );
 
@@ -171,6 +185,14 @@ const Approve = () => {
       });
 
       if (!response.ok) throw new Error(`เกิดข้อผิดพลาด (${response.status})`);
+
+      if (formData.tagsOther.trim()) {
+        fetch('http://localhost:3000/api/expertise', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ label: formData.tagsOther.trim(), description: formData.tagsOtherDesc.trim() }),
+        }).catch(() => {});
+      }
 
       setSuccess(true);
       setTimeout(() => navigate('/requirements'), 1500);
@@ -323,15 +345,17 @@ const Approve = () => {
             <label className="approve-label">Expertise / ความเชี่ยวชาญ</label>
             <div className="expertise-pills">
               {expertiseOptions.map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  className={`expertise-pill${formData.tags.includes(opt) ? ' expertise-pill--active' : ''}`}
-                  style={formData.tags.includes(opt) ? getTagStyle(opt) : {}}
-                  onClick={() => toggleTag(opt)}
-                >
-                  {opt}
-                </button>
+                <div key={opt} className="expertise-pill-wrap">
+                  <button
+                    type="button"
+                    className={`expertise-pill${formData.tags.includes(opt) ? ' expertise-pill--active' : ''}`}
+                    style={formData.tags.includes(opt) ? getTagStyle(opt) : {}}
+                    onClick={() => toggleTag(opt)}
+                  >
+                    {opt}
+                  </button>
+                  {expertiseDescMap[opt] && <span className="expertise-pill-tooltip">{expertiseDescMap[opt]}</span>}
+                </div>
               ))}
               <button
                 type="button"
@@ -343,15 +367,24 @@ const Approve = () => {
               </button>
             </div>
             {formData.tags.includes('Other') && (
-              <input
-                type="text"
-                name="tagsOther"
-                className="approve-input"
-                style={{ marginTop: '10px' }}
-                placeholder="ระบุความเชี่ยวชาญ"
-                value={formData.tagsOther}
-                onChange={handleChange}
-              />
+              <div className="other-expertise-fields">
+                <input
+                  type="text"
+                  name="tagsOther"
+                  className="approve-input"
+                  placeholder="ระบุความเชี่ยวชาญ"
+                  value={formData.tagsOther}
+                  onChange={handleChange}
+                />
+                <textarea
+                  name="tagsOtherDesc"
+                  className="approve-input other-expertise-desc"
+                  placeholder="คำอธิบายเพิ่มเติม (ไม่บังคับ)"
+                  value={formData.tagsOtherDesc}
+                  onChange={handleChange}
+                  rows={3}
+                />
+              </div>
             )}
           </div>
 

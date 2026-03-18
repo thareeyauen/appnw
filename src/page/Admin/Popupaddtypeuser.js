@@ -2,29 +2,27 @@ import { useState } from 'react';
 import './Popupaddtypeuser.css';
 
 const Popupaddtypeuser = ({ onClose, onAdd }) => {
-  const [value, setValue] = useState('');
+  const [label, setLabel] = useState('');
+  const [description, setDescription] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSubmit = async () => {
-    if (!value.trim()) return;
+    if (!label.trim()) return;
     setSaving(true);
     setError(null);
     try {
       const res = await fetch('http://localhost:3000/api/user-types', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label: value.trim() }),
+        body: JSON.stringify({ label: label.trim(), description: description.trim() }),
       });
-      if (!res.ok) {
-        setError('บันทึกไม่สำเร็จ');
-        return;
-      }
+      if (!res.ok) { setError('บันทึกไม่สำเร็จ'); return; }
       const saved = await res.json();
       onAdd(saved);
       onClose();
     } catch {
-      onAdd({ id: Date.now(), label: value.trim() });
+      onAdd({ id: Date.now(), label: label.trim(), description: description.trim() });
       onClose();
     } finally {
       setSaving(false);
@@ -39,15 +37,23 @@ const Popupaddtypeuser = ({ onClose, onAdd }) => {
           <button className="ptu-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <p className="ptu-label">Please type new type of user</p>
+        <p className="ptu-label">ชื่อ Role</p>
         <input
           className="ptu-input"
           type="text"
-          placeholder="Value"
-          value={value}
-          onChange={e => setValue(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+          placeholder="เช่น Admin, Editor..."
+          value={label}
+          onChange={e => setLabel(e.target.value)}
           autoFocus
+        />
+
+        <p className="ptu-label">คำอธิบาย (สิทธิ์การเข้าถึง)</p>
+        <textarea
+          className="ptu-input ptu-textarea"
+          placeholder="อธิบายสิทธิ์และหน้าที่ของ Role นี้..."
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          rows={3}
         />
 
         {error && <p className="ptu-error">{error}</p>}

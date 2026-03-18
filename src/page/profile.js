@@ -44,21 +44,20 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    let cancelled = false;
     const stored = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
 
     if (stored.length === 0) {
       setLoading(false);
-      return;
+      return () => { cancelled = true; };
     }
 
-    // ดึง status ของแต่ละ submission โดยตรงจาก GET /api/submissions/:id
-    // endpoint นี้ return { id, status: 'pending'|'approved'|'rejected', ... }
     const pendingItems = stored.filter(s => s.status === 'pending');
 
     if (pendingItems.length === 0) {
       setRequests(stored);
       setLoading(false);
-      return;
+      return () => { cancelled = true; };
     }
 
     Promise.allSettled(
@@ -68,7 +67,7 @@ const Profile = () => {
           .catch(() => null)
       )
     ).then(results => {
-      // สร้าง map: id → status จาก API
+      if (cancelled) return;
       const statusMap = {};
       pendingItems.forEach((s, i) => {
         const val = results[i].value;
@@ -77,7 +76,6 @@ const Profile = () => {
         }
       });
 
-      // อ่าน localStorage ใหม่ (อาจถูก handleCancel แก้ไขระหว่างที่ fetch อยู่)
       const current = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
       const updated = current.map(s => {
         if (s.status !== 'pending') return s;
@@ -88,17 +86,16 @@ const Profile = () => {
 
       localStorage.setItem(LS_KEY, JSON.stringify(updated));
       setRequests(updated);
-    }).finally(() => setLoading(false));
+    }).finally(() => { if (!cancelled) setLoading(false); });
+
+    return () => { cancelled = true; };
   }, []);
 
   const handleCancel = (id) => {
-    // อัปเดต UI ทันที ไม่รอ API
-    setRequests(prev => {
-      const updated = prev.filter(r => r.id !== id);
-      localStorage.setItem(LS_KEY, JSON.stringify(updated));
-      return updated;
-    });
-    // best-effort — แจ้ง backend ด้วย แต่ไม่ block UI
+    const current = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    const updated = current.filter(r => String(r.id) !== String(id));
+    localStorage.setItem(LS_KEY, JSON.stringify(updated));
+    setRequests(updated);
     fetch(`http://localhost:3000/api/submissions/${id}`, { method: 'DELETE' })
       .catch(() => {});
   };

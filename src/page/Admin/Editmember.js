@@ -25,13 +25,16 @@ const Editmember = () => {
   const { id } = useParams();
 
   const [expertiseOptions, setExpertiseOptions] = useState([]);
+  const [expertiseDescMap, setExpertiseDescMap] = useState({});
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [tagInput, setTagInput] = useState('');
+  const [otherActive, setOtherActive] = useState(false);
+  const [otherLabel, setOtherLabel] = useState('');
+  const [otherDesc, setOtherDesc] = useState('');
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [nameCardPreview, setNameCardPreview] = useState(null);
   const [nameCardFileName, setNameCardFileName] = useState('');
@@ -39,7 +42,13 @@ const Editmember = () => {
   useEffect(() => {
     fetch('http://localhost:3000/api/expertise')
       .then(res => res.json())
-      .then(data => setExpertiseOptions(Array.isArray(data) ? data.map(e => e.label) : []))
+      .then(data => {
+        if (!Array.isArray(data)) return;
+        setExpertiseOptions(data.map(e => e.label));
+        const map = {};
+        data.forEach(e => { map[e.label] = e.description || ''; });
+        setExpertiseDescMap(map);
+      })
       .catch(() => {});
   }, []);
 
@@ -95,17 +104,6 @@ const Editmember = () => {
     });
   };
 
-  const handleAddTag = () => {
-    const trimmed = tagInput.trim();
-    if (!trimmed) return;
-    if ((member.tags || []).some(t => t.label === trimmed)) { setTagInput(''); return; }
-    setMember(prev => ({
-      ...prev,
-      tags: [...(prev.tags || []), { label: trimmed }],
-    }));
-    setTagInput('');
-  };
-
   const handleRemoveTag = (index) => {
     setMember(prev => ({
       ...prev,
@@ -116,12 +114,17 @@ const Editmember = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
+      const tagsToSave = [...(member.tags || [])];
+      if (otherActive && otherLabel.trim()) {
+        tagsToSave.push({ label: otherLabel.trim(), description: otherDesc.trim() });
+      }
       const response = await fetch(`http://localhost:3000/api/people/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(member),
+        body: JSON.stringify({ ...member, tags: tagsToSave }),
       });
       if (!response.ok) throw new Error('Save failed');
+
       navigate('/manage-members');
     } catch (error) {
       console.error('Error saving:', error);
@@ -245,18 +248,48 @@ const Editmember = () => {
               {expertiseOptions.map(opt => {
                 const active = (member.tags || []).some(t => t.label === opt);
                 return (
-                  <button
-                    key={opt}
-                    type="button"
-                    className={`expertise-pill${active ? ' expertise-pill--active' : ''}`}
-                    style={active ? getTagStyle(opt) : {}}
-                    onClick={() => togglePredefinedTag(opt)}
-                  >
-                    {opt}
-                  </button>
+                  <div key={opt} className="expertise-pill-wrap">
+                    <button
+                      type="button"
+                      className={`expertise-pill${active ? ' expertise-pill--active' : ''}`}
+                      style={active ? getTagStyle(opt) : {}}
+                      onClick={() => togglePredefinedTag(opt)}
+                    >
+                      {opt}
+                    </button>
+                    {expertiseDescMap[opt] && <span className="expertise-pill-tooltip">{expertiseDescMap[opt]}</span>}
+                  </div>
                 );
               })}
+              <div className="expertise-pill-wrap">
+                <button
+                  type="button"
+                  className={`expertise-pill${otherActive ? ' expertise-pill--active' : ''}`}
+                  style={otherActive ? { background: '#cab8d9', color: '#1a1a1a', borderColor: 'transparent' } : {}}
+                  onClick={() => setOtherActive(v => !v)}
+                >
+                  Other
+                </button>
+              </div>
             </div>
+            {otherActive && (
+              <div className="other-expertise-fields">
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="ระบุความเชี่ยวชาญของคุณ"
+                  value={otherLabel}
+                  onChange={e => setOtherLabel(e.target.value)}
+                />
+                <textarea
+                  className="form-input other-expertise-desc"
+                  placeholder="คำอธิบายเพิ่มเติม (ไม่บังคับ)"
+                  value={otherDesc}
+                  onChange={e => setOtherDesc(e.target.value)}
+                  rows={3}
+                />
+              </div>
+            )}
             {/* Custom (non-predefined) tags */}
             {(member.tags || []).filter(t => !expertiseOptions.includes(t.label)).length > 0 && (
               <div className="tag-container" style={{ marginTop: '10px' }}>
@@ -270,17 +303,6 @@ const Editmember = () => {
                 )}
               </div>
             )}
-            <div className="em-tag-input-row">
-              <input
-                type="text"
-                className="form-input em-tag-input"
-                placeholder="เพิ่ม expertise อื่น ๆ..."
-                value={tagInput}
-                onChange={e => setTagInput(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleAddTag()}
-              />
-              <button className="em-tag-add-btn" type="button" onClick={handleAddTag}>+</button>
-            </div>
           </div>
 
           <div className="form-group">

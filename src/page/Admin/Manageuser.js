@@ -5,6 +5,7 @@ import './Manageuser.css';
 const Manageuser = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [validTypes, setValidTypes] = useState(null);
   const [loading, setLoading] = useState(true);
   const MOCK_USERS = [
     { id: 1, name: 'Saranchanok', email: 'saranchanok@hand.co.th', type: 'User' },
@@ -12,17 +13,23 @@ const Manageuser = () => {
   ];
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/users')
-      .then(res => res.json())
-      .then(data => {
-        setUsers(Array.isArray(data) && data.length > 0 ? data : MOCK_USERS);
-        setLoading(false);
-      })
-      .catch(() => {
-        setUsers(MOCK_USERS);
-        setLoading(false);
-      });
+    Promise.all([
+      fetch('http://localhost:3000/api/users').then(r => r.json()).catch(() => null),
+      fetch('http://localhost:3000/api/user-types').then(r => r.json()).catch(() => null),
+    ]).then(([userData, typeData]) => {
+      setUsers(Array.isArray(userData) && userData.length > 0 ? userData : MOCK_USERS);
+      if (Array.isArray(typeData)) {
+        setValidTypes(new Set(typeData.map(t => t.label)));
+      }
+      setLoading(false);
+    });
   }, []);
+
+  const resolveType = (type) => {
+    if (!type) return '-';
+    if (validTypes === null) return type;
+    return validTypes.has(type) ? type : '-';
+  };
 
   const handleEditDetail = (id) => {
     navigate(`/manage-users/${id}`);
@@ -71,7 +78,7 @@ return (
                     <tr key={u.id ?? idx} className="mu-tr">
                       <td className="mu-td mu-td-no">{idx + 1}</td>
                       <td className="mu-td mu-td-name">{u.name || u.username || '-'}</td>
-                      <td className="mu-td mu-td-type">{u.type || u.role || '-'}</td>
+                      <td className="mu-td mu-td-type">{resolveType(u.type || u.role)}</td>
                       <td className="mu-td mu-td-manage">
                         <button
                           className="mu-edit-btn"

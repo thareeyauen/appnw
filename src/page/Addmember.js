@@ -40,6 +40,7 @@ const Addmember = () => {
     email: '',
     tags: [],
     tagsOther: '',
+    tagsOtherDesc: '',
     network: '',
     project: '',
     project_th: '',
@@ -50,6 +51,7 @@ const Addmember = () => {
   });
 
   const [expertiseOptions, setExpertiseOptions] = useState([]);
+  const [expertiseDescMap, setExpertiseDescMap] = useState({});
   const [profileImage, setProfileImage] = useState(null);
   const [nameCard, setNameCard] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -59,7 +61,13 @@ const Addmember = () => {
   useEffect(() => {
     fetch('http://localhost:3000/api/expertise')
       .then(res => res.json())
-      .then(data => setExpertiseOptions(Array.isArray(data) ? data.map(e => e.label) : []))
+      .then(data => {
+        if (!Array.isArray(data)) return;
+        setExpertiseOptions(data.map(e => e.label));
+        const map = {};
+        data.forEach(e => { map[e.label] = e.description || ''; });
+        setExpertiseDescMap(map);
+      })
       .catch(() => {});
   }, []);
 
@@ -87,7 +95,7 @@ const Addmember = () => {
 
     // ตรวจสอบว่ามีข้อมูลอย่างน้อย 1 ช่อง หรือมีไฟล์ Name Card
     const hasAnyField = Object.entries(formData).some(
-      ([key, val]) => key !== 'tagsOther' && String(val).trim() !== ''
+      ([key, val]) => key !== 'tagsOther' && key !== 'tagsOtherDesc' && String(val).trim() !== ''
     );
     if (!hasAnyField && !nameCard) {
       setError('กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง หรือเพิ่ม Name Card');
@@ -98,7 +106,7 @@ const Addmember = () => {
 
     const tagsArray = formData.tags.flatMap(label =>
       label === 'Other'
-        ? (formData.tagsOther.trim() ? [{ label: formData.tagsOther.trim() }] : [])
+        ? (formData.tagsOther.trim() ? [{ label: formData.tagsOther.trim(), description: formData.tagsOtherDesc.trim() }] : [])
         : [{ label }]
     );
 
@@ -312,15 +320,17 @@ const Addmember = () => {
               <label className="form-label">Expertise / ความเชี่ยวชาญ</label>
               <div className="expertise-pills">
                 {expertiseOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    className={`expertise-pill${formData.tags.includes(opt) ? ' expertise-pill--active' : ''}`}
-                    style={formData.tags.includes(opt) ? getTagStyle(opt) : {}}
-                    onClick={() => toggleTag(opt)}
-                  >
-                    {opt}
-                  </button>
+                  <div key={opt} className="expertise-pill-wrap">
+                    <button
+                      type="button"
+                      className={`expertise-pill${formData.tags.includes(opt) ? ' expertise-pill--active' : ''}`}
+                      style={formData.tags.includes(opt) ? getTagStyle(opt) : {}}
+                      onClick={() => toggleTag(opt)}
+                    >
+                      {opt}
+                    </button>
+                    {expertiseDescMap[opt] && <span className="expertise-pill-tooltip">{expertiseDescMap[opt]}</span>}
+                  </div>
                 ))}
                 <button
                   type="button"
@@ -332,15 +342,24 @@ const Addmember = () => {
                 </button>
               </div>
               {formData.tags.includes('Other') && (
-                <input
-                  type="text"
-                  name="tagsOther"
-                  className="form-input"
-                  style={{ marginTop: '10px' }}
-                  placeholder="ระบุความเชี่ยวชาญของคุณ"
-                  value={formData.tagsOther}
-                  onChange={handleChange}
-                />
+                <div className="other-expertise-fields">
+                  <input
+                    type="text"
+                    name="tagsOther"
+                    className="form-input"
+                    placeholder="ระบุความเชี่ยวชาญของคุณ"
+                    value={formData.tagsOther}
+                    onChange={handleChange}
+                  />
+                  <textarea
+                    name="tagsOtherDesc"
+                    className="form-input other-expertise-desc"
+                    placeholder="คำอธิบายเพิ่มเติม (ไม่บังคับ)"
+                    value={formData.tagsOtherDesc}
+                    onChange={handleChange}
+                    rows={3}
+                  />
+                </div>
               )}
             </div>
 

@@ -164,33 +164,137 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   padding: 13px 16px;
   border-bottom: 1px solid #f0ece6;
+  position: relative;
 }
 
 .tu-list-item:last-child {
   border-bottom: none;
 }
 
+.tu-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
 .tu-item-label {
   font-size: 15px;
+  font-weight: 700;
   color: #1a1a1a;
 }
 
+.tu-item-desc {
+  font-size: 12px;
+  color: #999;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tu-item-desc--empty {
+  font-style: italic;
+  color: #ccc;
+}
+
+
+/* Action buttons */
+.tu-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.tu-edit-btn,
 .tu-delete-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
   transition: background 0.2s ease;
+  color: #888;
+}
+
+.tu-edit-btn:hover {
+  background: rgba(30, 136, 229, 0.1);
+  color: #1E88E5;
 }
 
 .tu-delete-btn:hover {
   background: rgba(191, 67, 67, 0.1);
+  color: #bf4343;
+}
+
+/* Edit description modal extras */
+.tu-edit-modal {
+  max-width: 380px !important;
+}
+
+.tu-modal-title {
+  margin: 0 0 4px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.tu-edit-role-name {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.tu-edit-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0dbd4;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.tu-edit-textarea:focus {
+  border-color: #1E88E5;
+}
+
+.tu-modal-save {
+  flex: 1;
+  padding: 12px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.tu-modal-save:hover {
+  background: #388E3C;
+}
+
+.tu-modal-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Add section */

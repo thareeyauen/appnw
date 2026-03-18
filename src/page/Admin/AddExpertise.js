@@ -11,6 +11,19 @@ const ProfileIcon = () => (
   </svg>
 );
 
+const PencilIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrashIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 const AddExpertise = () => {
   const navigate = useNavigate();
   const [expertiseList, setExpertiseList] = useState([]);
@@ -18,6 +31,9 @@ const AddExpertise = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [editTarget, setEditTarget] = useState(null);
+  const [editDesc, setEditDesc] = useState('');
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -31,9 +47,7 @@ const AddExpertise = () => {
     e.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDeleteClick = (item) => {
-    setDeleteTarget(item);
-  };
+  const handleDeleteClick = (item) => setDeleteTarget(item);
 
   const confirmDelete = async () => {
     try {
@@ -46,9 +60,28 @@ const AddExpertise = () => {
     }
   };
 
-  const handleAdd = (saved) => {
-    setExpertiseList(prev => [...prev, saved]);
+  const handleEditClick = (item) => {
+    setEditTarget(item);
+    setEditDesc(item.description || '');
   };
+
+  const handleSaveDesc = async () => {
+    setSaving(true);
+    try {
+      await fetch(`http://localhost:3000/api/expertise/${editTarget.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: editDesc }),
+      });
+    } catch { /* optimistic — update anyway */ }
+    setExpertiseList(prev => prev.map(e =>
+      e.id === editTarget.id ? { ...e, description: editDesc } : e
+    ));
+    setSaving(false);
+    setEditTarget(null);
+  };
+
+  const handleAdd = (saved) => setExpertiseList(prev => [...prev, saved]);
 
   return (
     <div className="ae-page" onClick={() => showMenu && setShowMenu(false)}>
@@ -56,13 +89,7 @@ const AddExpertise = () => {
         <div className="ae-header-left">
           <button className="ae-back-btn" onClick={() => navigate('/data-management')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M19 12H5M5 12L12 19M5 12L12 5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
           <h1 className="ae-title">Add Expertise</h1>
@@ -73,12 +100,10 @@ const AddExpertise = () => {
           {showMenu && (
             <div className="ae-profile-dropdown">
               <div className="ae-dropdown-item" onClick={() => navigate('/profile')}>
-                <span>My Profile</span>
-                <span className="ae-arrow">›</span>
+                <span>My Profile</span><span className="ae-arrow">›</span>
               </div>
               <div className="ae-dropdown-item ae-logout" onClick={() => navigate('/Login')}>
-                <span>Log out</span>
-                <span className="ae-arrow">›</span>
+                <span>Log out</span><span className="ae-arrow">›</span>
               </div>
             </div>
           )}
@@ -87,7 +112,6 @@ const AddExpertise = () => {
 
       <div className="ae-content">
         <div className="ae-card">
-          {/* Search bar */}
           <div className="ae-search-row">
             <svg className="ae-icon-menu" width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M3 6h18M3 12h18M3 18h18" stroke="#555" strokeWidth="2" strokeLinecap="round"/>
@@ -105,21 +129,28 @@ const AddExpertise = () => {
             </svg>
           </div>
 
-          {/* List */}
           <div className="ae-list">
             {filtered.map(item => (
               <div key={item.id} className="ae-list-item">
-                <span className="ae-item-label">{item.label}</span>
-                <button className="ae-delete-btn" onClick={() => handleDeleteClick(item)}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
+                <div className="ae-item-info">
+                  <span className="ae-item-label">{item.label}</span>
+                  {item.description
+                    ? <span className="ae-item-desc">{item.description}</span>
+                    : <span className="ae-item-desc ae-item-desc--empty">ยังไม่มีคำอธิบาย</span>
+                  }
+                </div>
+                <div className="ae-item-actions">
+                  <button className="ae-edit-btn" title="แก้ไขคำอธิบาย" onClick={() => handleEditClick(item)}>
+                    <PencilIcon />
+                  </button>
+                  <button className="ae-delete-btn" title="ลบ" onClick={() => handleDeleteClick(item)}>
+                    <TrashIcon />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Add button */}
           <p className="ae-add-label">Add more data here</p>
           <button className="ae-add-row-btn" onClick={() => setShowPopup(true)}>
             Add Expertise
@@ -130,12 +161,34 @@ const AddExpertise = () => {
       </div>
 
       {showPopup && (
-        <Popupaddexpertise
-          onClose={() => setShowPopup(false)}
-          onAdd={handleAdd}
-        />
+        <Popupaddexpertise onClose={() => setShowPopup(false)} onAdd={handleAdd} />
       )}
 
+      {/* Edit description modal */}
+      {editTarget && (
+        <div className="ae-modal-overlay" onClick={() => setEditTarget(null)}>
+          <div className="ae-modal ae-edit-modal" onClick={e => e.stopPropagation()}>
+            <p className="ae-modal-title">แก้ไขคำอธิบาย</p>
+            <p className="ae-edit-role-name">"{editTarget.label}"</p>
+            <textarea
+              className="ae-edit-textarea"
+              placeholder="อธิบายความเชี่ยวชาญนี้..."
+              value={editDesc}
+              onChange={e => setEditDesc(e.target.value)}
+              rows={4}
+              autoFocus
+            />
+            <div className="ae-modal-actions">
+              <button className="ae-modal-cancel" onClick={() => setEditTarget(null)}>ยกเลิก</button>
+              <button className="ae-modal-save" onClick={handleSaveDesc} disabled={saving}>
+                {saving ? 'กำลังบันทึก...' : 'บันทึก'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete confirmation modal */}
       {deleteTarget && (
         <div className="ae-modal-overlay" onClick={() => setDeleteTarget(null)}>
           <div className="ae-modal" onClick={e => e.stopPropagation()}>
@@ -143,12 +196,8 @@ const AddExpertise = () => {
               ยืนยันการลบ <strong>"{deleteTarget.label}"</strong> ?
             </p>
             <div className="ae-modal-actions">
-              <button className="ae-modal-cancel" onClick={() => setDeleteTarget(null)}>
-                ยกเลิก
-              </button>
-              <button className="ae-modal-confirm" onClick={confirmDelete}>
-                ลบ
-              </button>
+              <button className="ae-modal-cancel" onClick={() => setDeleteTarget(null)}>ยกเลิก</button>
+              <button className="ae-modal-confirm" onClick={confirmDelete}>ลบ</button>
             </div>
           </div>
         </div>

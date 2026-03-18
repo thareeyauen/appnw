@@ -77,6 +77,13 @@
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
+  margin-bottom: 14px;
+}
+
+.popup-textarea {
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.5;
 }
 
 .popup-input:focus {

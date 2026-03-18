@@ -7,6 +7,7 @@ function Landing() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +21,22 @@ function Landing() {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, []); 
+  }, []);
+
+  const q = searchQuery.trim().toLowerCase();
+  const filteredContacts = q
+    ? contacts.filter(c => {
+        const tagLabels = (c.tags || []).map(t => (t.label || '').toLowerCase()).join(' ');
+        return (
+          (c.name || '').toLowerCase().includes(q) ||
+          (c.name_th || '').toLowerCase().includes(q) ||
+          (c.email || '').toLowerCase().includes(q) ||
+          (c.location || '').toLowerCase().includes(q) ||
+          (c.project || '').toLowerCase().includes(q) ||
+          tagLabels.includes(q)
+        );
+      })
+    : contacts;
 
   return (
     <div className="landing-container">
@@ -53,17 +69,21 @@ function Landing() {
         <h2>Contact list</h2>
 
         <div className="search-box">
-          <input placeholder="Searching" />
+          <input
+            placeholder="Searching"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+          />
         </div>
 
         {loading ? (
           <p>Loading contacts...</p>
         ) : (
-          <p className="people-count">{contacts.length} people</p>
+          <p className="people-count">{filteredContacts.length} people</p>
         )}
 
 <div className="card-list">
-  {contacts.map(contact => (
+  {filteredContacts.map(contact => (
     <Card
       key={contact.id}
       id={contact.id}

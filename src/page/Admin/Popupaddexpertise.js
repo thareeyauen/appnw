@@ -2,30 +2,27 @@ import { useState } from 'react';
 import './Popupaddexpertise.css';
 
 const Popupaddexpertise = ({ onClose, onAdd }) => {
-  const [value, setValue] = useState('');
+  const [label, setLabel] = useState('');
+  const [description, setDescription] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSubmit = async () => {
-    if (!value.trim()) return;
+    if (!label.trim()) return;
     setSaving(true);
     setError(null);
     try {
       const res = await fetch('http://localhost:3000/api/expertise', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label: value.trim() }),
+        body: JSON.stringify({ label: label.trim(), description: description.trim() }),
       });
-      if (!res.ok) {
-        setError('บันทึกไม่สำเร็จ');
-        return;
-      }
+      if (!res.ok) { setError('บันทึกไม่สำเร็จ'); return; }
       const saved = await res.json();
       onAdd(saved);
       onClose();
     } catch {
-      // backend ไม่ได้รัน — เพิ่ม item ใน list พร้อม temp id
-      onAdd({ id: Date.now(), label: value.trim() });
+      onAdd({ id: Date.now(), label: label.trim(), description: description.trim() });
       onClose();
     } finally {
       setSaving(false);
@@ -40,15 +37,23 @@ const Popupaddexpertise = ({ onClose, onAdd }) => {
           <button className="popup-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <p className="popup-label">Please type new expertise</p>
+        <p className="popup-label">ชื่อ Expertise</p>
         <input
           className="popup-input"
           type="text"
-          placeholder="Value"
-          value={value}
-          onChange={e => setValue(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+          placeholder="เช่น Open Data, Whistle Blower..."
+          value={label}
+          onChange={e => setLabel(e.target.value)}
           autoFocus
+        />
+
+        <p className="popup-label">คำอธิบาย</p>
+        <textarea
+          className="popup-input popup-textarea"
+          placeholder="อธิบายความเชี่ยวชาญนี้..."
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          rows={3}
         />
 
         {error && <p className="popup-error">{error}</p>}

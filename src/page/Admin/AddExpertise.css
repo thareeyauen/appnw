@@ -170,6 +170,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   padding: 13px 16px;
   border-bottom: 1px solid #f0ece6;
 }
@@ -178,26 +179,63 @@
   border-bottom: none;
 }
 
+.ae-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
 .ae-item-label {
   font-size: 15px;
+  font-weight: 700;
   color: #1a1a1a;
 }
 
+.ae-item-desc {
+  font-size: 12px;
+  color: #999;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ae-item-desc--empty {
+  font-style: italic;
+  color: #ccc;
+}
+
+.ae-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ae-edit-btn,
 .ae-delete-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
   transition: background 0.2s ease;
-  color: #1a1a1a;
+  color: #888;
+}
+
+.ae-edit-btn:hover {
+  background: rgba(30, 136, 229, 0.1);
+  color: #1E88E5;
 }
 
 .ae-delete-btn:hover {
   background: rgba(191, 67, 67, 0.1);
+  color: #bf4343;
 }
 
 /* Add section */
@@ -260,6 +298,67 @@
 }
 
 .ae-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Edit modal */
+.ae-edit-modal {
+  max-width: 380px !important;
+}
+
+.ae-modal-title {
+  margin: 0 0 4px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.ae-edit-role-name {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.ae-edit-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0dbd4;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.ae-edit-textarea:focus {
+  border-color: #1E88E5;
+}
+
+.ae-modal-save {
+  flex: 1;
+  padding: 12px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.ae-modal-save:hover {
+  background: #388E3C;
+}
+
+.ae-modal-save:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
