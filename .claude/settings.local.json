@@ -5,7 +5,11 @@
       "Bash(find /c/Users/Thare/backend_appnw -type f ! -path */node_modules/*)",
       "Bash(\"c:\\\\Users\\\\Thare\\\\appnw\\\\src\\\\page\\\\Admin\\\\Edituser.js\")",
       "Bash(\"c:\\\\Users\\\\Thare\\\\appnw\\\\src\\\\page\\\\Admin\\\\Edituser.css\")",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(find c:/Users/Thare/ -name *.js -not -path */node_modules/* -not -path */src/*)",
+      "Bash(find c:/Users/Thare/ -name index.js -not -path */node_modules/* -not -path */.vscode/* -not -path */AppData/*)",
+      "Bash(find c:/Users/Thare/OneDrive/ -name *.js -not -path */node_modules/*)",
+      "Bash(find c:/Users/Thare/OneDrive/รูปภาพ/เอกสาร/NETWORK/ -name *.js -not -path */node_modules/*)"
     ]
   }
 }

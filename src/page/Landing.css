@@ -87,8 +87,7 @@
   width: 100%;
   max-width: 420px;
   padding: 24px 20px;
-  flex: 1;                
-  overflow-y: auto;      
+  flex: 1;
 }
 
 .content h1 {
@@ -111,7 +110,7 @@
 }
 
 .search-box input {
-  width: 100%;
+  width: 115%;
   padding: 10px 40px 10px 14px;
   border-radius: 20px;
   border: none;

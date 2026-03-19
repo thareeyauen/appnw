@@ -5,7 +5,7 @@ import './Member.css';
 const TAG_COLORS = {
   'Open Data':            { background: '#7BAE8E', color: 'white' },
   'Public Procurement':   { background: '#D97757', color: 'white' },
-  'Whistle Blower':       { background: '#D4A96A', color: 'white' },
+  'WhistleBlower':        { background: '#D4A96A', color: 'white' },
   'Business integrity':   { background: '#7A9BB5', color: 'white' },
 };
 const getTagStyle = (label) => TAG_COLORS[label] || { background: '#cab8d9', color: '#1a1a1a' };
@@ -17,6 +17,19 @@ const Member = () => {
   // 2. สร้าง State สำหรับเก็บข้อมูลสมาชิกที่ดึงมาได้
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [expertiseDescMap, setExpertiseDescMap] = useState({});
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/expertise')
+      .then(r => r.json())
+      .then(data => {
+        if (!Array.isArray(data)) return;
+        const map = {};
+        data.forEach(e => { map[e.label] = e.description || ''; });
+        setExpertiseDescMap(map);
+      })
+      .catch(() => {});
+  }, []);
 
   // 3. ดึงข้อมูลจาก API เมื่อ Component โหลด
   useEffect(() => {
@@ -114,12 +127,17 @@ const Member = () => {
           <div className="form-group">
             <label className="form-label">Expertise / ความเชี่ยวชาญ</label>
             <div className="tag-container">
-              {/* วนลูปแสดง Tags จริงจาก API */}
-              {member.tags.map((tag, index) => (
-                <span key={index} className={`tag ${index === 0 ? 'tag-primary' : 'tag-secondary'}`} style={getTagStyle(tag.label)}>
-                  {tag.label}
-                </span>
-              ))}
+              {member.tags.map((tag, index) => {
+                const desc = tag.description || expertiseDescMap[tag.label] || '';
+                return (
+                  <div key={index} className="tag-pill-wrap">
+                    <span className={`tag ${index === 0 ? 'tag-primary' : 'tag-secondary'}`} style={getTagStyle(tag.label)}>
+                      {tag.label}
+                    </span>
+                    {desc && <span className="tag-pill-tooltip">{desc}</span>}
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="form-group">

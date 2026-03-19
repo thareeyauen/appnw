@@ -8,6 +8,7 @@ function Landing() {
   const [loading, setLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [expertiseDescMap, setExpertiseDescMap] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +22,18 @@ function Landing() {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/expertise')
+      .then(r => r.json())
+      .then(data => {
+        if (!Array.isArray(data)) return;
+        const map = {};
+        data.forEach(e => { map[e.label] = e.description || ''; });
+        setExpertiseDescMap(map);
+      })
+      .catch(() => {});
   }, []);
 
   const q = searchQuery.trim().toLowerCase();
@@ -94,6 +107,7 @@ function Landing() {
       tags={contact.tags}
       email={contact.email}
       avatar={contact.avatar}
+      expertiseDescMap={expertiseDescMap}
     />
   ))}
 </div>

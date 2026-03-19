@@ -147,9 +147,50 @@
 }
 
 .card-link {
-  text-decoration: none; 
-  color: inherit;      
+  text-decoration: none;
+  color: inherit;
 }
 .card-link:hover .card-title {
-  color: #ff4400;     
+  color: #ff4400;
+}
+
+/* Tag tooltip */
+.tag-pill-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.tag-pill-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2C2C2C;
+  color: #EDE8DC;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: max-content;
+  max-width: 200px;
+  white-space: normal;
+  text-align: center;
+  z-index: 30;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.tag-pill-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #2C2C2C;
+}
+
+.tag-pill-wrap:hover .tag-pill-tooltip {
+  display: block;
 }

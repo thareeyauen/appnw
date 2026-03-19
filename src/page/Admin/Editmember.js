@@ -7,7 +7,7 @@ import './Editmember.css';
 const TAG_COLORS = {
   'Open Data':            { background: '#7BAE8E', color: 'white' },
   'Public Procurement':   { background: '#D97757', color: 'white' },
-  'Whistle Blower':       { background: '#D4A96A', color: 'white' },
+  'WhistleBlower':       { background: '#D4A96A', color: 'white' },
   'Business integrity':   { background: '#7A9BB5', color: 'white' },
 };
 const getTagStyle = (label) => TAG_COLORS[label] || { background: '#cab8d9', color: '#1a1a1a' };
@@ -124,6 +124,14 @@ const Editmember = () => {
         body: JSON.stringify({ ...member, tags: tagsToSave }),
       });
       if (!response.ok) throw new Error('Save failed');
+
+      if (otherActive && otherLabel.trim()) {
+        fetch('http://localhost:3000/api/expertise', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ label: otherLabel.trim(), description: otherDesc.trim() }),
+        }).catch(() => {});
+      }
 
       navigate('/manage-members');
     } catch (error) {
@@ -283,7 +291,7 @@ const Editmember = () => {
                 />
                 <textarea
                   className="form-input other-expertise-desc"
-                  placeholder="คำอธิบายเพิ่มเติม (ไม่บังคับ)"
+                  placeholder="คำอธิบายเพิ่มเติม"
                   value={otherDesc}
                   onChange={e => setOtherDesc(e.target.value)}
                   rows={3}
@@ -295,10 +303,13 @@ const Editmember = () => {
               <div className="tag-container" style={{ marginTop: '10px' }}>
                 {(member.tags || []).map((tag, index) =>
                   expertiseOptions.includes(tag.label) ? null : (
-                    <span key={index} className="tag" style={getTagStyle(tag.label)}>
-                      {tag.label}
-                      <button className="em-tag-remove" onClick={() => handleRemoveTag(index)}>×</button>
-                    </span>
+                    <div key={index} className="expertise-pill-wrap">
+                      <span className="tag" style={getTagStyle(tag.label)}>
+                        {tag.label}
+                        <button className="em-tag-remove" onClick={() => handleRemoveTag(index)}>×</button>
+                      </span>
+                      {tag.description && <span className="expertise-pill-tooltip">{tag.description}</span>}
+                    </div>
                   )
                 )}
               </div>

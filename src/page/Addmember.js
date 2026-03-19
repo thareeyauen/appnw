@@ -5,7 +5,7 @@ import './Addmember.css';
 const TAG_COLORS = {
   'Open Data':            { background: '#7BAE8E', color: 'white' },
   'Public Procurement':   { background: '#D97757', color: 'white' },
-  'Whistle Blower':       { background: '#D4A96A', color: 'white' },
+  'WhistleBlower':        { background: '#D4A96A', color: 'white' },
   'Business integrity':   { background: '#7A9BB5', color: 'white' },
 };
 const getTagStyle = (label) => TAG_COLORS[label] || { background: '#cab8d9', color: '#1a1a1a' };
@@ -354,7 +354,7 @@ const Addmember = () => {
                   <textarea
                     name="tagsOtherDesc"
                     className="form-input other-expertise-desc"
-                    placeholder="คำอธิบายเพิ่มเติม (ไม่บังคับ)"
+                    placeholder="คำอธิบายเพิ่มเติม"
                     value={formData.tagsOtherDesc}
                     onChange={handleChange}
                     rows={3}
