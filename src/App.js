@@ -37,14 +37,14 @@ const AuthRoute = ({ children }) => {
 function App() {
   return (
     <Routes>
-      {/* Public */}
-      <Route path="/Login"      element={<Login />} />
-      <Route path="/"           element={<Landing />} />
-      <Route path="/member"     element={<Member />} />
-      <Route path="/1"          element={<Card />} />
-      <Route path="/member/:id" element={<Member />} />
+      {/* Login only — accessible without token */}
+      <Route path="/Login" element={<Login />} />
 
-      {/* Authenticated users */}
+      {/* All other routes require login */}
+      <Route path="/"           element={<AuthRoute><Landing /></AuthRoute>} />
+      <Route path="/member"     element={<AuthRoute><Member /></AuthRoute>} />
+      <Route path="/1"          element={<AuthRoute><Card /></AuthRoute>} />
+      <Route path="/member/:id" element={<AuthRoute><Member /></AuthRoute>} />
       <Route path="/addmember"  element={<AuthRoute><Addmember /></AuthRoute>} />
       <Route path="/profile"    element={<AuthRoute><Profile /></AuthRoute>} />
 
