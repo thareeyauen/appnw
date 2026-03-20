@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { authHeaders, handleUnauthorized } from '../../utils/auth';
 import './Edituser.css';
 
 const MOCK_USERS = [
@@ -45,15 +46,15 @@ const Edituser = () => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/user-types')
+    fetch('http://localhost:3000/api/user-types', { headers: authHeaders(false) })
       .then(res => res.json())
       .then(data => setUserTypeOptions(Array.isArray(data) ? data.map(t => t.label) : []))
       .catch(() => setUserTypeOptions(['User', 'Admin']));
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/users/${id}`)
-      .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+    fetch(`http://localhost:3000/api/users/${id}`, { headers: authHeaders(false) })
+      .then(res => { handleUnauthorized(res.status); if (!res.ok) throw new Error(); return res.json(); })
       .then(data => { setUser(data); setLoading(false); })
       .catch(() => {
         const found = MOCK_USERS.find(u => u.id === parseInt(id));
@@ -73,7 +74,7 @@ const Edituser = () => {
     try {
       const res = await fetch(`http://localhost:3000/api/users/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error();
@@ -88,7 +89,7 @@ const Edituser = () => {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res = await fetch(`http://localhost:3000/api/users/${id}`, { method: 'DELETE' });
+      const res = await fetch(`http://localhost:3000/api/users/${id}`, { method: 'DELETE', headers: authHeaders(false) });
       if (!res.ok) throw new Error();
     } catch {
       // fallback — mock delete ok

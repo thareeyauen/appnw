@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authHeaders, handleUnauthorized } from '../../utils/auth';
 import './Typeuser.css';
 import Popupaddtypeuser from './Popupaddtypeuser';
 
@@ -37,8 +38,8 @@ const Typeuser = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/user-types')
-      .then(res => res.json())
+    fetch('http://localhost:3000/api/user-types', { headers: authHeaders(false) })
+      .then(res => { handleUnauthorized(res.status); return res.json(); })
       .then(data => setTypeList(Array.isArray(data) ? data : []))
       .catch(() => setError('ไม่สามารถโหลดข้อมูลได้'));
   }, []);
@@ -51,7 +52,7 @@ const Typeuser = () => {
 
   const confirmDelete = async () => {
     try {
-      await fetch(`http://localhost:3000/api/user-types/${deleteTarget.id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:3000/api/user-types/${deleteTarget.id}`, { method: 'DELETE', headers: authHeaders(false) });
       setTypeList(prev => prev.filter(t => t.id !== deleteTarget.id));
     } catch {
       setError('ลบไม่สำเร็จ');
@@ -70,7 +71,7 @@ const Typeuser = () => {
     try {
       await fetch(`http://localhost:3000/api/user-types/${editTarget.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ description: editDesc }),
       });
       setTypeList(prev => prev.map(t =>

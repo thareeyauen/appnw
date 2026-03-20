@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authHeaders, handleUnauthorized } from '../../utils/auth';
 import './Manageuser.css';
 
 const Manageuser = () => {
@@ -14,8 +15,8 @@ const Manageuser = () => {
 
   useEffect(() => {
     Promise.all([
-      fetch('http://localhost:3000/api/users').then(r => r.json()).catch(() => null),
-      fetch('http://localhost:3000/api/user-types').then(r => r.json()).catch(() => null),
+      fetch('http://localhost:3000/api/users',      { headers: authHeaders(false) }).then(r => { handleUnauthorized(r.status); return r.json(); }).catch(() => null),
+      fetch('http://localhost:3000/api/user-types', { headers: authHeaders(false) }).then(r => r.json()).catch(() => null),
     ]).then(([userData, typeData]) => {
       setUsers(Array.isArray(userData) && userData.length > 0 ? userData : MOCK_USERS);
       if (Array.isArray(typeData)) {

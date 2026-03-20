@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { authHeaders } from '../../utils/auth';
 import './Requirement.css';
 
 const formatDate = (dateStr) => {
@@ -22,7 +23,7 @@ const Requirement = () => {
   // → force re-fetch เสมอ ไม่ใช้ข้อมูลเก่า
   useEffect(() => {
     setLoading(true);
-    fetch('http://localhost:3000/api/admin/submissions')
+    fetch('http://localhost:3000/api/admin/submissions', { headers: authHeaders(false) })
       .then((res) => res.json())
       .then((data) => {
         // แสดงเฉพาะ pending (status === 'pending' หรือ ไม่มี status field)

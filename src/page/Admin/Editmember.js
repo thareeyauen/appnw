@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { authHeaders } from '../../utils/auth';
 import '../Member.css';
 import './Editmember.css';
 
@@ -120,7 +121,7 @@ const Editmember = () => {
       }
       const response = await fetch(`http://localhost:3000/api/people/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ ...member, tags: tagsToSave }),
       });
       if (!response.ok) throw new Error('Save failed');
@@ -128,7 +129,7 @@ const Editmember = () => {
       if (otherActive && otherLabel.trim()) {
         fetch('http://localhost:3000/api/expertise', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders(),
           body: JSON.stringify({ label: otherLabel.trim(), description: otherDesc.trim() }),
         }).catch(() => {});
       }
@@ -147,6 +148,7 @@ const Editmember = () => {
     try {
       const response = await fetch(`http://localhost:3000/api/people/${id}`, {
         method: 'DELETE',
+        headers: authHeaders(false),
       });
       if (!response.ok) throw new Error('Delete failed');
       navigate('/manage-members');
