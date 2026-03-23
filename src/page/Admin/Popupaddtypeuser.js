@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { authHeaders } from '../../utils/auth';
 import './Popupaddtypeuser.css';
 
 const Popupaddtypeuser = ({ onClose, onAdd }) => {
@@ -14,7 +15,7 @@ const Popupaddtypeuser = ({ onClose, onAdd }) => {
     try {
       const res = await fetch('http://localhost:3000/api/user-types', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ label: label.trim(), description: description.trim() }),
       });
       if (!res.ok) { setError('บันทึกไม่สำเร็จ'); return; }
