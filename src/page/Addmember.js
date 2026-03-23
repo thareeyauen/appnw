@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authHeaders, getUser } from '../utils/auth';
 import './Addmember.css';
 
 const TAG_COLORS = {
@@ -128,7 +129,7 @@ const Addmember = () => {
     try {
       const response = await fetch('http://localhost:3000/api/submissions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify(payload),
       });
 
@@ -178,8 +179,9 @@ const Addmember = () => {
         created.submission?._id ??
         null; // null = ไม่ได้ ID จริง → fallback ใช้ name/email matching แทน
 
-      // Save submission to localStorage so Profile can show it
-      const myList = JSON.parse(localStorage.getItem('mySubmissions') || '[]');
+      // Save submission to localStorage so Profile can show it (per-user key)
+      const lsKey  = `mySubmissions_${getUser()?.email || 'guest'}`;
+      const myList = JSON.parse(localStorage.getItem(lsKey) || '[]');
       myList.unshift({
         id: submissionId !== null ? String(submissionId) : String(Date.now()),
         name: payload.name,
@@ -191,7 +193,7 @@ const Addmember = () => {
         created_at: created.created_at || new Date().toISOString(),
         status: 'pending',
       });
-      localStorage.setItem('mySubmissions', JSON.stringify(myList));
+      localStorage.setItem(lsKey, JSON.stringify(myList));
 
       setSuccess(true);
       setTimeout(() => navigate('/'), 1500);

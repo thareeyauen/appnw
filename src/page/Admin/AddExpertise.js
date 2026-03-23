@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authHeaders, handleUnauthorized } from '../../utils/auth';
 import './AddExpertise.css';
 import Popupaddexpertise from './Popupaddexpertise';
 
@@ -37,8 +38,8 @@ const AddExpertise = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/expertise')
-      .then(res => res.json())
+    fetch('http://localhost:3000/api/expertise', { headers: authHeaders(false) })
+      .then(res => { handleUnauthorized(res.status); return res.json(); })
       .then(data => setExpertiseList(Array.isArray(data) ? data : []))
       .catch(() => setError('ไม่สามารถโหลดข้อมูลได้'));
   }, []);
@@ -51,7 +52,7 @@ const AddExpertise = () => {
 
   const confirmDelete = async () => {
     try {
-      await fetch(`http://localhost:3000/api/expertise/${deleteTarget.id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:3000/api/expertise/${deleteTarget.id}`, { method: 'DELETE', headers: authHeaders(false) });
       setExpertiseList(prev => prev.filter(e => e.id !== deleteTarget.id));
     } catch {
       setError('ลบไม่สำเร็จ');
@@ -70,7 +71,7 @@ const AddExpertise = () => {
     try {
       await fetch(`http://localhost:3000/api/expertise/${editTarget.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ description: editDesc }),
       });
     } catch { /* optimistic — update anyway */ }

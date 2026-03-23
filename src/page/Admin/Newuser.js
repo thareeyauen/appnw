@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authHeaders } from '../../utils/auth';
 import './Newuser.css';
 
 const generatePassword = () => {
@@ -16,7 +17,7 @@ const Newuser = () => {
   const [password] = useState(generatePassword);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/user-types')
+    fetch('http://localhost:3000/api/user-types', { headers: authHeaders(false) })
       .then(res => res.json())
       .then(data => {
         const labels = Array.isArray(data) ? data.map(t => t.label) : ['User', 'Admin'];
@@ -48,7 +49,7 @@ const Newuser = () => {
     try {
       const res = await fetch('http://localhost:3000/api/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ ...form, password }),
       });
       if (!res.ok) throw new Error();

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { authHeaders, handleUnauthorized } from '../../utils/auth';
 import './Approve.css';
 
 
@@ -76,7 +77,7 @@ const Approve = () => {
   const [nameCardName, setNameCardName] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/expertise')
+    fetch('http://localhost:3000/api/expertise', { headers: authHeaders(false) })
       .then(res => res.json())
       .then(data => {
         if (!Array.isArray(data)) return;
@@ -89,8 +90,8 @@ const Approve = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/admin/submissions/${id}`)
-      .then((res) => {
+    fetch(`http://localhost:3000/api/admin/submissions/${id}`, { headers: authHeaders(false) })
+      .then((res) => { handleUnauthorized(res.status);
         console.log('[Approve] HTTP status:', res.status);
         return res.json();
       })
@@ -180,7 +181,7 @@ const Approve = () => {
     try {
       const response = await fetch(`http://localhost:3000/api/admin/submissions/${id}/approve`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify(payload),
       });
 
@@ -189,7 +190,7 @@ const Approve = () => {
       if (formData.tagsOther.trim()) {
         fetch('http://localhost:3000/api/expertise', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders(),
           body: JSON.stringify({ label: formData.tagsOther.trim(), description: formData.tagsOtherDesc.trim() }),
         }).catch(() => {});
       }
@@ -214,6 +215,7 @@ const Approve = () => {
     try {
       const response = await fetch(`http://localhost:3000/api/admin/submissions/${id}/reject`, {
         method: 'PATCH',
+        headers: authHeaders(false),
       });
 
       if (!response.ok) throw new Error(`เกิดข้อผิดพลาด (${response.status})`);

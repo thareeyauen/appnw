@@ -1,7 +1,8 @@
 import Card from '../component/Card';
 import './Landing.css';
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { clearAuth, isAdmin } from '../utils/auth';
 
 function Landing() {
   const [contacts, setContacts] = useState([]);
@@ -64,11 +65,17 @@ function Landing() {
   </svg></span>
           {showMenu && (
             <div className="profile-dropdown">
+              {isAdmin() && (
+                <div className="dropdown-item" onClick={() => navigate('/admin')}>
+                  <span>Admin</span>
+                  <span className="arrow">›</span>
+                </div>
+              )}
               <div className="dropdown-item" onClick={() => navigate('/profile')}>
                 <span>My Profile</span>
                 <span className="arrow">›</span>
               </div>
-              <div className="dropdown-item logout" onClick={() => navigate('/Login')}>
+              <div className="dropdown-item logout" onClick={() => { clearAuth(); navigate('/Login'); }}>
                 <span>Log out</span>
                 <span className="arrow">›</span>
               </div>

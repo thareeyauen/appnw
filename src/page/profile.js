@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getUser, authHeaders } from '../utils/auth';
 import './profile.css';
 
 const formatDate = (dateStr) => {
@@ -18,17 +19,11 @@ const STATUS_LABEL = {
   rejected: { text: 'ถูกปฏิเสธ',   cls: 'status-rejected' },
 };
 
-const LS_KEY = 'mySubmissions';
-
 const Profile = () => {
   const navigate = useNavigate();
 
-  // Mock user — replace with real auth later
-  const user = {
-    type: 'User',
-    name: 'Saranchanok',
-    email: 'saranchanok@hand.co.th',
-  };
+  const user   = getUser() || { type: '', name: '', email: '' };
+  const LS_KEY = `mySubmissions_${user.email}`;
 
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +57,7 @@ const Profile = () => {
 
     Promise.allSettled(
       pendingItems.map(s =>
-        fetch(`http://localhost:3000/api/submissions/${s.id}`)
+        fetch(`http://localhost:3000/api/submissions/${s.id}`, { headers: authHeaders(false) })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null)
       )
@@ -96,7 +91,7 @@ const Profile = () => {
     const updated = current.filter(r => String(r.id) !== String(id));
     localStorage.setItem(LS_KEY, JSON.stringify(updated));
     setRequests(updated);
-    fetch(`http://localhost:3000/api/submissions/${id}`, { method: 'DELETE' })
+    fetch(`http://localhost:3000/api/submissions/${id}`, { method: 'DELETE', headers: authHeaders(false) })
       .catch(() => {});
   };
 
