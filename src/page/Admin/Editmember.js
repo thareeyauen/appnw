@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { authHeaders } from '../../utils/auth';
+import { authHeaders, handleUnauthorized } from '../../utils/auth';
 import '../Member.css';
 import './Editmember.css';
 
@@ -147,7 +147,11 @@ const Editmember = () => {
         headers: authHeaders(),
         body: JSON.stringify({ ...memberData, tags: tagsToSave }),
       });
-      if (!response.ok) throw new Error('Save failed');
+      if (!response.ok) {
+        if (handleUnauthorized(response.status)) return;
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || `Save failed (${response.status})`);
+      }
 
       if (otherActive && otherLabel.trim()) {
         fetch('http://localhost:3000/api/expertise', {
@@ -160,7 +164,7 @@ const Editmember = () => {
       navigate('/manage-members');
     } catch (error) {
       console.error('Error saving:', error);
-      alert('เกิดข้อผิดพลาดในการบันทึก');
+      alert(`เกิดข้อผิดพลาดในการบันทึก: ${error.message}`);
     } finally {
       setSaving(false);
     }

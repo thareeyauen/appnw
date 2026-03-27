@@ -77,12 +77,16 @@ const Edituser = () => {
         headers: authHeaders(),
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error();
-    } catch {
-      // fallback — mock save ok
+      if (!res.ok) {
+        if (handleUnauthorized(res.status)) return;
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Save failed (${res.status})`);
+      }
+      navigate('/manage-users');
+    } catch (error) {
+      alert(`เกิดข้อผิดพลาด: ${error.message}`);
     } finally {
       setSaving(false);
-      navigate('/manage-users');
     }
   };
 

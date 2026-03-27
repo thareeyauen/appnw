@@ -31,11 +31,22 @@ const Profile = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  const handleResetPassword = () => {
-    // TODO: เรียก API เปลี่ยน password จริงเมื่อมี auth
-    setOldPassword('');
-    setNewPassword('');
-    setShowResetModal(false);
+  const handleResetPassword = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/change-password', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (!res.ok) return alert(data.message || 'เกิดข้อผิดพลาด');
+      alert('เปลี่ยนรหัสผ่านสำเร็จ');
+      setOldPassword('');
+      setNewPassword('');
+      setShowResetModal(false);
+    } catch {
+      alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+    }
   };
 
   useEffect(() => {
