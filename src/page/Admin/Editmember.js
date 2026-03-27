@@ -37,7 +37,9 @@ const Editmember = () => {
   const [otherLabel, setOtherLabel] = useState('');
   const [otherDesc, setOtherDesc] = useState('');
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
   const [nameCardPreview, setNameCardPreview] = useState(null);
+  const [nameCardFile, setNameCardFile] = useState(null);
   const [nameCardFileName, setNameCardFileName] = useState('');
 
   useEffect(() => {
@@ -61,8 +63,8 @@ const Editmember = () => {
       })
       .then(data => {
         setMember(data);
-        setAvatarPreview(data.avatar || null);
-        setNameCardPreview(data.nameCard || null);
+        setAvatarPreview(data.photo ? `http://localhost:3000${data.photo}` : null);
+        setNameCardPreview(data.nameCard ? `http://localhost:3000${data.nameCard}` : null);
         setLoading(false);
       })
       .catch(error => {
@@ -78,18 +80,16 @@ const Editmember = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setAvatarPreview(url);
-    handleChange('avatar', url);
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
   const handleNameCardChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setNameCardPreview(url);
+    setNameCardFile(file);
+    setNameCardPreview(URL.createObjectURL(file));
     setNameCardFileName(file.name);
-    handleChange('nameCard', url);
   };
 
   const togglePredefinedTag = (label) => {
@@ -115,14 +115,37 @@ const Editmember = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
+      if (avatarFile) {
+        const form = new FormData();
+        form.append('photo', avatarFile);
+        const photoRes = await fetch(`http://localhost:3000/api/people/${id}/photo`, {
+          method: 'POST',
+          headers: { Authorization: authHeaders().Authorization },
+          body: form,
+        });
+        if (!photoRes.ok) throw new Error('อัปโหลดรูปโปรไฟล์ไม่สำเร็จ');
+      }
+
+      if (nameCardFile) {
+        const form = new FormData();
+        form.append('nameCard', nameCardFile);
+        const ncRes = await fetch(`http://localhost:3000/api/people/${id}/namecard`, {
+          method: 'POST',
+          headers: { Authorization: authHeaders().Authorization },
+          body: form,
+        });
+        if (!ncRes.ok) throw new Error('อัปโหลด Name Card ไม่สำเร็จ');
+      }
+
       const tagsToSave = [...(member.tags || [])];
       if (otherActive && otherLabel.trim()) {
         tagsToSave.push({ label: otherLabel.trim(), description: otherDesc.trim() });
       }
+      const { photo, nameCard, ...memberData } = member;
       const response = await fetch(`http://localhost:3000/api/people/${id}`, {
         method: 'PUT',
         headers: authHeaders(),
-        body: JSON.stringify({ ...member, tags: tagsToSave }),
+        body: JSON.stringify({ ...memberData, tags: tagsToSave }),
       });
       if (!response.ok) throw new Error('Save failed');
 
