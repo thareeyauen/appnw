@@ -1,3 +1,4 @@
+import { API_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authHeaders, handleUnauthorized } from '../../utils/auth';
@@ -77,7 +78,7 @@ const Approve = () => {
   const [nameCardName, setNameCardName] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/expertise', { headers: authHeaders(false) })
+    fetch(`${API_URL}/api/expertise`, { headers: authHeaders(false) })
       .then(res => res.json())
       .then(data => {
         if (!Array.isArray(data)) return;
@@ -90,7 +91,7 @@ const Approve = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/admin/submissions/${id}`, { headers: authHeaders(false) })
+    fetch(`${API_URL}/api/admin/submissions/${id}`, { headers: authHeaders(false) })
       .then((res) => { handleUnauthorized(res.status);
         console.log('[Approve] HTTP status:', res.status);
         return res.json();
@@ -179,7 +180,7 @@ const Approve = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/submissions/${id}/approve`, {
+      const response = await fetch(`${API_URL}/api/admin/submissions/${id}/approve`, {
         method: 'PATCH',
         headers: authHeaders(),
         body: JSON.stringify(payload),
@@ -188,7 +189,7 @@ const Approve = () => {
       if (!response.ok) throw new Error(`เกิดข้อผิดพลาด (${response.status})`);
 
       if (formData.tagsOther.trim()) {
-        fetch('http://localhost:3000/api/expertise', {
+        fetch(`${API_URL}/api/expertise`, {
           method: 'POST',
           headers: authHeaders(),
           body: JSON.stringify({ label: formData.tagsOther.trim(), description: formData.tagsOtherDesc.trim() }),
@@ -213,7 +214,7 @@ const Approve = () => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/submissions/${id}/reject`, {
+      const response = await fetch(`${API_URL}/api/admin/submissions/${id}/reject`, {
         method: 'PATCH',
         headers: authHeaders(false),
       });

@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect } from 'react'; // 1. เพิ่ม useState และ useEffect
 import { useNavigate, useParams } from 'react-router-dom';
 import './Member.css';
@@ -20,7 +21,7 @@ const Member = () => {
   const [expertiseDescMap, setExpertiseDescMap] = useState({});
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/expertise')
+    fetch(`${API_URL}/api/expertise`)
       .then(r => r.json())
       .then(data => {
         if (!Array.isArray(data)) return;
@@ -33,7 +34,7 @@ const Member = () => {
 
   // 3. ดึงข้อมูลจาก API เมื่อ Component โหลด
   useEffect(() => {
-    fetch(`http://localhost:3000/api/people/${id}`)
+    fetch(`${API_URL}/api/people/${id}`)
       .then(response => {
         if (!response.ok) throw new Error('Member not found');
         return response.json();

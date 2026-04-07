@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import Card from '../component/Card';
 import './Landing.css';
 import React, { useState, useEffect } from "react";
@@ -13,7 +14,7 @@ function Landing() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/people')
+    fetch(`${API_URL}/api/people`)
       .then(response => response.json())
       .then(data => {
         setContacts(data);
@@ -26,7 +27,7 @@ function Landing() {
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/expertise')
+    fetch(`${API_URL}/api/expertise`)
       .then(r => r.json())
       .then(data => {
         if (!Array.isArray(data)) return;

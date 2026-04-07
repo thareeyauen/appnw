@@ -1,3 +1,4 @@
+import { API_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authHeaders, handleUnauthorized } from '../../utils/auth';
@@ -46,14 +47,14 @@ const Edituser = () => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/user-types', { headers: authHeaders(false) })
+    fetch(`${API_URL}/api/user-types`, { headers: authHeaders(false) })
       .then(res => res.json())
       .then(data => setUserTypeOptions(Array.isArray(data) ? data.map(t => t.label) : []))
       .catch(() => setUserTypeOptions(['User', 'Admin']));
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/users/${id}`, { headers: authHeaders(false) })
+    fetch(`${API_URL}/api/users/${id}`, { headers: authHeaders(false) })
       .then(res => { handleUnauthorized(res.status); if (!res.ok) throw new Error(); return res.json(); })
       .then(data => { setUser(data); setLoading(false); })
       .catch(() => {
@@ -72,7 +73,7 @@ const Edituser = () => {
     const payload = { name: user.name, email: user.email, type: user.type };
     if (pendingPassword) payload.password = pendingPassword;
     try {
-      const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+      const res = await fetch(`${API_URL}/api/users/${id}`, {
         method: 'PUT',
         headers: authHeaders(),
         body: JSON.stringify(payload),
@@ -93,7 +94,7 @@ const Edituser = () => {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res = await fetch(`http://localhost:3000/api/users/${id}`, { method: 'DELETE', headers: authHeaders(false) });
+      const res = await fetch(`${API_URL}/api/users/${id}`, { method: 'DELETE', headers: authHeaders(false) });
       if (!res.ok) throw new Error();
     } catch {
       // fallback — mock delete ok

@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authHeaders, getUser } from '../utils/auth';
@@ -60,7 +61,7 @@ const Addmember = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/expertise')
+    fetch(`${API_URL}/api/expertise`)
       .then(res => res.json())
       .then(data => {
         if (!Array.isArray(data)) return;
@@ -127,7 +128,7 @@ const Addmember = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/submissions', {
+      const response = await fetch(`${API_URL}/api/submissions`, {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify(payload),
@@ -199,7 +200,7 @@ const Addmember = () => {
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       if (err.name === 'TypeError') {
-        setError('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ — กรุณาตรวจสอบว่า Backend กำลังทำงานอยู่ (http://localhost:3000)');
+        setError('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ — กรุณาตรวจสอบว่า Backend กำลังทำงานอยู่ (${API_URL})');
       } else {
         setError(err.message);
       }

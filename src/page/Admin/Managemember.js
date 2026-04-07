@@ -1,3 +1,4 @@
+import { API_URL } from '../../config';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Managemember.css';
@@ -12,7 +13,7 @@ const Managemember = () => {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/people')
+    fetch(`${API_URL}/api/people`)
       .then(res => res.json())
       .then(data => {
         setMembers(Array.isArray(data) ? data : []);

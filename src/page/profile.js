@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUser, authHeaders } from '../utils/auth';
@@ -33,7 +34,7 @@ const Profile = () => {
 
   const handleResetPassword = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/auth/change-password', {
+      const res = await fetch(`${API_URL}/api/auth/change-password`, {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify({ oldPassword, newPassword }),
@@ -68,7 +69,7 @@ const Profile = () => {
 
     Promise.allSettled(
       pendingItems.map(s =>
-        fetch(`http://localhost:3000/api/submissions/${s.id}`, { headers: authHeaders(false) })
+        fetch(`${API_URL}/api/submissions/${s.id}`, { headers: authHeaders(false) })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null)
       )
@@ -102,7 +103,7 @@ const Profile = () => {
     const updated = current.filter(r => String(r.id) !== String(id));
     localStorage.setItem(LS_KEY, JSON.stringify(updated));
     setRequests(updated);
-    fetch(`http://localhost:3000/api/submissions/${id}`, { method: 'DELETE', headers: authHeaders(false) })
+    fetch(`${API_URL}/api/submissions/${id}`, { method: 'DELETE', headers: authHeaders(false) })
       .catch(() => {});
   };
 

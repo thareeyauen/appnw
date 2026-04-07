@@ -1,3 +1,4 @@
+import { API_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authHeaders, handleUnauthorized } from '../../utils/auth';
@@ -43,7 +44,7 @@ const Editmember = () => {
   const [nameCardFileName, setNameCardFileName] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/expertise')
+    fetch(`${API_URL}/api/expertise`)
       .then(res => res.json())
       .then(data => {
         if (!Array.isArray(data)) return;
@@ -56,15 +57,15 @@ const Editmember = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/people/${id}`)
+    fetch(`${API_URL}/api/people/${id}`)
       .then(response => {
         if (!response.ok) throw new Error('Member not found');
         return response.json();
       })
       .then(data => {
         setMember(data);
-        setAvatarPreview(data.photo ? `http://localhost:3000${data.photo}` : null);
-        setNameCardPreview(data.nameCard ? `http://localhost:3000${data.nameCard}` : null);
+        setAvatarPreview(data.photo ? `${API_URL}${data.photo}` : null);
+        setNameCardPreview(data.nameCard ? `${API_URL}${data.nameCard}` : null);
         setLoading(false);
       })
       .catch(error => {
@@ -118,7 +119,7 @@ const Editmember = () => {
       if (avatarFile) {
         const form = new FormData();
         form.append('photo', avatarFile);
-        const photoRes = await fetch(`http://localhost:3000/api/people/${id}/photo`, {
+        const photoRes = await fetch(`${API_URL}/api/people/${id}/photo`, {
           method: 'POST',
           headers: { Authorization: authHeaders().Authorization },
           body: form,
@@ -129,7 +130,7 @@ const Editmember = () => {
       if (nameCardFile) {
         const form = new FormData();
         form.append('nameCard', nameCardFile);
-        const ncRes = await fetch(`http://localhost:3000/api/people/${id}/namecard`, {
+        const ncRes = await fetch(`${API_URL}/api/people/${id}/namecard`, {
           method: 'POST',
           headers: { Authorization: authHeaders().Authorization },
           body: form,
@@ -142,7 +143,7 @@ const Editmember = () => {
         tagsToSave.push({ label: otherLabel.trim(), description: otherDesc.trim() });
       }
       const { photo, nameCard, ...memberData } = member;
-      const response = await fetch(`http://localhost:3000/api/people/${id}`, {
+      const response = await fetch(`${API_URL}/api/people/${id}`, {
         method: 'PUT',
         headers: authHeaders(),
         body: JSON.stringify({ ...memberData, tags: tagsToSave }),
@@ -154,7 +155,7 @@ const Editmember = () => {
       }
 
       if (otherActive && otherLabel.trim()) {
-        fetch('http://localhost:3000/api/expertise', {
+        fetch(`${API_URL}/api/expertise`, {
           method: 'POST',
           headers: authHeaders(),
           body: JSON.stringify({ label: otherLabel.trim(), description: otherDesc.trim() }),
@@ -173,7 +174,7 @@ const Editmember = () => {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/people/${id}`, {
+      const response = await fetch(`${API_URL}/api/people/${id}`, {
         method: 'DELETE',
         headers: authHeaders(false),
       });

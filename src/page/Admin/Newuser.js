@@ -1,3 +1,4 @@
+import { API_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authHeaders } from '../../utils/auth';
@@ -17,7 +18,7 @@ const Newuser = () => {
   const [password] = useState(generatePassword);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/user-types', { headers: authHeaders(false) })
+    fetch(`${API_URL}/api/user-types`, { headers: authHeaders(false) })
       .then(res => res.json())
       .then(data => {
         const labels = Array.isArray(data) ? data.map(t => t.label) : ['User', 'Admin'];
@@ -47,7 +48,7 @@ const Newuser = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch('http://localhost:3000/api/users', {
+      const res = await fetch(`${API_URL}/api/users`, {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify({ ...form, password }),

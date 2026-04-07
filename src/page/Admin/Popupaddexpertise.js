@@ -1,3 +1,4 @@
+import { API_URL } from '../../config';
 import { useState } from 'react';
 import { authHeaders } from '../../utils/auth';
 import './Popupaddexpertise.css';
@@ -13,7 +14,7 @@ const Popupaddexpertise = ({ onClose, onAdd }) => {
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch('http://localhost:3000/api/expertise', {
+      const res = await fetch(`${API_URL}/api/expertise`, {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify({ label: label.trim(), description: description.trim() }),
