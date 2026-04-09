@@ -118,7 +118,7 @@ function Landing() {
       location={contact.location}
       tags={contact.tags}
       email={contact.email}
-      avatar={contact.avatar}
+      avatar={contact.avatar ? `${API_URL}${contact.avatar}` : null}
       expertiseDescMap={expertiseDescMap}
     />
   ))}

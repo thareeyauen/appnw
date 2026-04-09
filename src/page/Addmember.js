@@ -1,7 +1,8 @@
 import { API_URL } from '../config';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authHeaders, getUser } from '../utils/auth';
+import Cropper from 'react-easy-crop';
 import './Addmember.css';
 
 const TAG_COLORS = {
@@ -55,7 +56,12 @@ const Addmember = () => {
   const [expertiseOptions, setExpertiseOptions] = useState([]);
   const [expertiseDescMap, setExpertiseDescMap] = useState({});
   const [profileImage, setProfileImage] = useState(null);
+  const [profileBlob, setProfileBlob] = useState(null);
   const [nameCard, setNameCard] = useState(null);
+  const [cropImage, setCropImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -75,6 +81,27 @@ const Addmember = () => {
 
   const handleBack = () => {
     navigate('/');
+  };
+
+  const onCropComplete = useCallback((_, pixels) => {
+    setCroppedAreaPixels(pixels);
+  }, []);
+
+  const handleCropConfirm = async () => {
+    const img = new Image();
+    img.src = cropImage;
+    await new Promise(r => { img.onload = r; });
+    const canvas = document.createElement('canvas');
+    const { x, y, width, height } = croppedAreaPixels;
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
+    canvas.toBlob(blob => {
+      setProfileImage(URL.createObjectURL(blob));
+      setProfileBlob(blob);
+      setCropImage(null);
+    }, 'image/jpeg', 0.92);
   };
 
   const handleChange = (e) => {
@@ -112,26 +139,26 @@ const Addmember = () => {
         : [{ label }]
     );
 
-    const payload = {
-      name: formData.name,
-      name_th: formData.name_th,
-      location: formData.location,
-      email: formData.email,
-      tags: tagsArray,
-      network: formData.network,
-      project: formData.project,
-      project_th: formData.project_th,
-      position: formData.position,
-      position_th: formData.position_th,
-      country: formData.country,
-      note: formData.note,
-    };
+    const body = new FormData();
+    body.append('name', formData.name);
+    body.append('name_th', formData.name_th);
+    body.append('location', formData.location);
+    body.append('email', formData.email);
+    body.append('tags', JSON.stringify(tagsArray));
+    body.append('network', formData.network);
+    body.append('project', formData.project);
+    body.append('project_th', formData.project_th);
+    body.append('position', formData.position);
+    body.append('position_th', formData.position_th);
+    body.append('country', formData.country);
+    body.append('note', formData.note);
+    if (profileBlob) body.append('avatar', profileBlob, 'avatar.jpg');
 
     try {
       const response = await fetch(`${API_URL}/api/submissions`, {
         method: 'POST',
-        headers: authHeaders(),
-        body: JSON.stringify(payload),
+        headers: authHeaders(false),
+        body,
       });
 
       if (!response.ok) {
@@ -185,12 +212,12 @@ const Addmember = () => {
       const myList = JSON.parse(localStorage.getItem(lsKey) || '[]');
       myList.unshift({
         id: submissionId !== null ? String(submissionId) : String(Date.now()),
-        name: payload.name,
-        project: payload.project,
-        country: payload.country,
-        location: payload.location,
-        email: payload.email,
-        tags: payload.tags,
+        name: formData.name,
+        project: formData.project,
+        country: formData.country,
+        location: formData.location,
+        email: formData.email,
+        tags: tagsArray,
         created_at: created.created_at || new Date().toISOString(),
         status: 'pending',
       });
@@ -258,7 +285,11 @@ const Addmember = () => {
             style={{ display: 'none' }}
             onChange={(e) => {
               const file = e.target.files[0];
-              if (file) setProfileImage(URL.createObjectURL(file));
+              if (!file) return;
+              setCropImage(URL.createObjectURL(file));
+              setCrop({ x: 0, y: 0 });
+              setZoom(1);
+              e.target.value = '';
             }}
           />
         </label>
@@ -495,6 +526,49 @@ const Addmember = () => {
           </button>
         </form>
       </div>
+
+      {/* Avatar Crop Modal */}
+      {cropImage && (
+        <div className="em-modal-overlay">
+          <div className="em-crop-modal">
+            <p className="em-modal-text">ปรับรูปโปรไฟล์</p>
+            <div className="em-crop-container">
+              <Cropper
+                image={cropImage}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                showGrid={false}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+            <div className="em-crop-zoom">
+              <span>-</span>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.05}
+                value={zoom}
+                onChange={e => setZoom(Number(e.target.value))}
+                className="em-crop-slider"
+              />
+              <span>+</span>
+            </div>
+            <div className="em-modal-actions">
+              <button type="button" className="em-modal-cancel" onClick={() => setCropImage(null)}>
+                ยกเลิก
+              </button>
+              <button type="button" className="em-modal-confirm em-modal-confirm-save" onClick={handleCropConfirm}>
+                ยืนยัน
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

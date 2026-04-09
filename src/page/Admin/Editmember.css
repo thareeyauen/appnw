@@ -324,3 +324,40 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* Avatar Crop Modal */
+.em-crop-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.em-crop-container {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.em-crop-zoom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #888;
+}
+
+.em-crop-slider {
+  flex: 1;
+  max-width: 200px;
+  accent-color: #4CAF50;
+  cursor: pointer;
+}

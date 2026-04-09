@@ -1,7 +1,8 @@
 import { API_URL } from '../../config';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authHeaders, handleUnauthorized } from '../../utils/auth';
+import Cropper from 'react-easy-crop';
 import '../Member.css';
 import './Editmember.css';
 
@@ -39,6 +40,10 @@ const Editmember = () => {
   const [otherDesc, setOtherDesc] = useState('');
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
+  const [cropImage, setCropImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [nameCardPreview, setNameCardPreview] = useState(null);
   const [nameCardFile, setNameCardFile] = useState(null);
   const [nameCardFileName, setNameCardFileName] = useState('');
@@ -64,7 +69,7 @@ const Editmember = () => {
       })
       .then(data => {
         setMember(data);
-        setAvatarPreview(data.photo ? `${API_URL}${data.photo}` : null);
+        setAvatarPreview(data.avatar ? `${API_URL}${data.avatar}` : (data.photo ? `${API_URL}${data.photo}` : null));
         setNameCardPreview(data.nameCard ? `${API_URL}${data.nameCard}` : null);
         setLoading(false);
       })
@@ -81,8 +86,36 @@ const Editmember = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    setCropImage(URL.createObjectURL(file));
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    e.target.value = '';
+  };
+
+  const onCropComplete = useCallback((_, pixels) => {
+    setCroppedAreaPixels(pixels);
+  }, []);
+
+  const getCroppedBlob = () => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const { x, y, width, height } = croppedAreaPixels;
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
+      canvas.toBlob(resolve, 'image/jpeg', 0.92);
+    };
+    img.src = cropImage;
+  });
+
+  const handleCropConfirm = async () => {
+    const blob = await getCroppedBlob();
+    const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
     setAvatarFile(file);
-    setAvatarPreview(URL.createObjectURL(file));
+    setAvatarPreview(URL.createObjectURL(blob));
+    setCropImage(null);
   };
 
   const handleNameCardChange = (e) => {
@@ -118,13 +151,13 @@ const Editmember = () => {
     try {
       if (avatarFile) {
         const form = new FormData();
-        form.append('photo', avatarFile);
-        const photoRes = await fetch(`${API_URL}/api/people/${id}/photo`, {
+        form.append('avatar', avatarFile);
+        const avatarRes = await fetch(`${API_URL}/api/people/${id}/avatar`, {
           method: 'POST',
           headers: { Authorization: authHeaders().Authorization },
           body: form,
         });
-        if (!photoRes.ok) throw new Error('อัปโหลดรูปโปรไฟล์ไม่สำเร็จ');
+        if (!avatarRes.ok) throw new Error('อัปโหลดรูปโปรไฟล์ไม่สำเร็จ');
       }
 
       if (nameCardFile) {
@@ -142,7 +175,7 @@ const Editmember = () => {
       if (otherActive && otherLabel.trim()) {
         tagsToSave.push({ label: otherLabel.trim(), description: otherDesc.trim() });
       }
-      const { photo, nameCard, ...memberData } = member;
+      const { avatar, photo, nameCard, ...memberData } = member;
       const response = await fetch(`${API_URL}/api/people/${id}`, {
         method: 'PUT',
         headers: authHeaders(),
@@ -496,6 +529,49 @@ const Editmember = () => {
               </button>
               <button className="em-modal-confirm" onClick={handleDelete} disabled={deleting}>
                 {deleting ? 'กำลังลบ...' : 'ลบ'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Avatar Crop Modal */}
+      {cropImage && (
+        <div className="em-modal-overlay">
+          <div className="em-crop-modal">
+            <p className="em-modal-text">ปรับรูปโปรไฟล์</p>
+            <div className="em-crop-container">
+              <Cropper
+                image={cropImage}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                showGrid={false}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+            <div className="em-crop-zoom">
+              <span>-</span>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.05}
+                value={zoom}
+                onChange={e => setZoom(Number(e.target.value))}
+                className="em-crop-slider"
+              />
+              <span>+</span>
+            </div>
+            <div className="em-modal-actions">
+              <button className="em-modal-cancel" onClick={() => setCropImage(null)}>
+                ยกเลิก
+              </button>
+              <button className="em-modal-confirm em-modal-confirm-save" onClick={handleCropConfirm}>
+                ยืนยัน
               </button>
             </div>
           </div>

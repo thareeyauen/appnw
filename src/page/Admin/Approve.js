@@ -1,7 +1,8 @@
 import { API_URL } from '../../config';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authHeaders, handleUnauthorized } from '../../utils/auth';
+import Cropper from 'react-easy-crop';
 import './Approve.css';
 
 
@@ -76,6 +77,10 @@ const Approve = () => {
 
   const [profileImage, setProfileImage] = useState(null);
   const [nameCardName, setNameCardName] = useState('');
+  const [cropImage, setCropImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   useEffect(() => {
     fetch(`${API_URL}/api/expertise`, { headers: authHeaders(false) })
@@ -154,6 +159,26 @@ const Approve = () => {
     });
   };
 
+  const onCropComplete = useCallback((_, pixels) => {
+    setCroppedAreaPixels(pixels);
+  }, []);
+
+  const handleCropConfirm = async () => {
+    const img = new Image();
+    img.src = cropImage;
+    await new Promise(r => { img.onload = r; });
+    const canvas = document.createElement('canvas');
+    const { x, y, width, height } = croppedAreaPixels;
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
+    canvas.toBlob(blob => {
+      setProfileImage(URL.createObjectURL(blob));
+      setCropImage(null);
+    }, 'image/jpeg', 0.92);
+  };
+
   const handleUpload = async () => {
     setError(null);
     setSubmitting(true);
@@ -187,6 +212,21 @@ const Approve = () => {
       });
 
       if (!response.ok) throw new Error(`เกิดข้อผิดพลาด (${response.status})`);
+
+      const result = await response.json();
+      const newPersonId = result.data?.id || result.data?._id;
+
+      if (newPersonId && profileImage) {
+        const imgRes = await fetch(profileImage);
+        const blob = await imgRes.blob();
+        const form = new FormData();
+        form.append('avatar', blob, 'avatar.jpg');
+        await fetch(`${API_URL}/api/people/${newPersonId}/avatar`, {
+          method: 'POST',
+          headers: { Authorization: authHeaders().Authorization },
+          body: form,
+        }).catch(() => {});
+      }
 
       if (formData.tagsOther.trim()) {
         fetch(`${API_URL}/api/expertise`, {
@@ -281,7 +321,11 @@ const Approve = () => {
             style={{ display: 'none' }}
             onChange={(e) => {
               const file = e.target.files[0];
-              if (file) setProfileImage(URL.createObjectURL(file));
+              if (!file) return;
+              setCropImage(URL.createObjectURL(file));
+              setCrop({ x: 0, y: 0 });
+              setZoom(1);
+              e.target.value = '';
             }}
           />
         </label>
@@ -525,6 +569,49 @@ const Approve = () => {
           </button>
         </div>
       </div>
+
+      {/* Avatar Crop Modal */}
+      {cropImage && (
+        <div className="em-modal-overlay">
+          <div className="em-crop-modal">
+            <p className="em-modal-text">ปรับรูปโปรไฟล์</p>
+            <div className="em-crop-container">
+              <Cropper
+                image={cropImage}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                showGrid={false}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+            <div className="em-crop-zoom">
+              <span>-</span>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.05}
+                value={zoom}
+                onChange={e => setZoom(Number(e.target.value))}
+                className="em-crop-slider"
+              />
+              <span>+</span>
+            </div>
+            <div className="em-modal-actions">
+              <button type="button" className="em-modal-cancel" onClick={() => setCropImage(null)}>
+                ยกเลิก
+              </button>
+              <button type="button" className="em-modal-confirm em-modal-confirm-save" onClick={handleCropConfirm}>
+                ยืนยัน
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

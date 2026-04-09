@@ -72,7 +72,7 @@ const Member = () => {
       <div className="member-content">
         <div className="profile-avatar">
           {member.avatar ? (
-            <img src={member.avatar} alt="Profile" className="avatar-preview" />
+            <img src={`${API_URL}${member.avatar}`} alt="Profile" className="avatar-preview" />
           ) : (
             <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -219,7 +219,7 @@ const Member = () => {
           <div className="name-card-preview-section">
             <h2 className="note-title">Name Card</h2>
             <img
-              src={member.nameCard}
+              src={`${API_URL}${member.nameCard}`}
               alt="Name Card"
               className="name-card-image"
             />
