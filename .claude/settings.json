@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "c:\\Users\\Thare\\backend_appnw\\models",
+      "c:\\Users\\Thare\\backend_appnw\\controllers",
+      "c:\\Users\\Thare\\backend_appnw\\routes",
+      "c:\\Users\\Thare\\backend_appnw"
+    ]
+  }
+}

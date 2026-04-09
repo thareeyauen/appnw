@@ -9,7 +9,9 @@
       "Bash(find c:/Users/Thare/ -name *.js -not -path */node_modules/* -not -path */src/*)",
       "Bash(find c:/Users/Thare/ -name index.js -not -path */node_modules/* -not -path */.vscode/* -not -path */AppData/*)",
       "Bash(find c:/Users/Thare/OneDrive/ -name *.js -not -path */node_modules/*)",
-      "Bash(find c:/Users/Thare/OneDrive/รูปภาพ/เอกสาร/NETWORK/ -name *.js -not -path */node_modules/*)"
+      "Bash(find c:/Users/Thare/OneDrive/รูปภาพ/เอกสาร/NETWORK/ -name *.js -not -path */node_modules/*)",
+      "Read(//c/Users/Thare/backend_appnw/models/**)",
+      "Read(//c/Users/Thare/backend_appnw/**)"
     ]
   }
 }
