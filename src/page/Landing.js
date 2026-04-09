@@ -76,6 +76,10 @@ function Landing() {
                 <span>My Profile</span>
                 <span className="arrow">›</span>
               </div>
+              <div className="dropdown-item" onClick={() => navigate('/feedback')}>
+                <span>Feedback</span>
+                <span className="arrow">›</span>
+              </div>
               <div className="dropdown-item logout" onClick={() => { clearAuth(); navigate('/Login'); }}>
                 <span>Log out</span>
                 <span className="arrow">›</span>

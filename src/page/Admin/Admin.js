@@ -32,6 +32,10 @@ const Admin = () => {
                 <span>My Profile</span>
                 <span className="admin-arrow">›</span>
               </div>
+              <div className="admin-dropdown-item" onClick={() => navigate('/feedback')}>
+                <span>Feedback</span>
+                <span className="admin-arrow">›</span>
+              </div>
               <div className="admin-dropdown-item admin-logout" onClick={() => navigate('/Login')}>
                 <span>Log out</span>
                 <span className="admin-arrow">›</span>
@@ -67,6 +71,13 @@ const Admin = () => {
           <h2 className="admin-section-title">Requirements</h2>
           <button className="admin-menu-button" onClick={() => navigate('/requirements')}>
             Requirements
+          </button>
+        </div>
+
+        <div className="admin-section">
+          <h2 className="admin-section-title">Feedback</h2>
+          <button className="admin-menu-button" onClick={() => navigate('/feedback-admin')}>
+            Feedback
           </button>
         </div>
       </div>

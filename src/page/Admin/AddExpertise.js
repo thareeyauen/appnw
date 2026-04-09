@@ -104,6 +104,9 @@ const AddExpertise = () => {
               <div className="ae-dropdown-item" onClick={() => navigate('/profile')}>
                 <span>My Profile</span><span className="ae-arrow">›</span>
               </div>
+              <div className="ae-dropdown-item" onClick={() => navigate('/feedback')}>
+                <span>Feedback</span><span className="ae-arrow">›</span>
+              </div>
               <div className="ae-dropdown-item ae-logout" onClick={() => navigate('/Login')}>
                 <span>Log out</span><span className="ae-arrow">›</span>
               </div>

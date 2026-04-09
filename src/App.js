@@ -19,6 +19,8 @@ import Datamanagement from "./page/Admin/Datamanagement";
 import AddExpertise from "./page/Admin/AddExpertise";
 import Typeuser     from "./page/Admin/Typeuser";
 import Profile      from "./page/profile";
+import Feedback     from "./page/Feedback";
+import FeedbackAdmin from "./page/Admin/Feedback_admin";
 import './App.css';
 
 const AdminRoute = ({ children }) => {
@@ -47,6 +49,7 @@ function App() {
       <Route path="/member/:id" element={<AuthRoute><Member /></AuthRoute>} />
       <Route path="/addmember"  element={<AuthRoute><Addmember /></AuthRoute>} />
       <Route path="/profile"    element={<AuthRoute><Profile /></AuthRoute>} />
+      <Route path="/feedback"   element={<AuthRoute><Feedback /></AuthRoute>} />
 
       {/* Admin only */}
       <Route path="/admin"                element={<AdminRoute><Admin /></AdminRoute>} />
@@ -60,6 +63,7 @@ function App() {
       <Route path="/data-management"      element={<AdminRoute><Datamanagement /></AdminRoute>} />
       <Route path="/add-expertise"        element={<AdminRoute><AddExpertise /></AdminRoute>} />
       <Route path="/type-of-users"        element={<AdminRoute><Typeuser /></AdminRoute>} />
+      <Route path="/feedback-admin"       element={<AdminRoute><FeedbackAdmin /></AdminRoute>} />
     </Routes>
   );
 }

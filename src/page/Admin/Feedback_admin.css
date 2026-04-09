@@ -1,0 +1,240 @@
+.fba-page {
+  min-height: 100vh;
+  background: #F5F0E8;
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
+}
+
+/* Header */
+.fba-header {
+  background: #534c4c;
+  height: 60px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fba-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fba-back-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.fba-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.fba-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.fba-profile-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.fba-profile-icon {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+}
+
+.fba-profile-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.fba-dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #1e1e1e;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+}
+
+.fba-dropdown-item:last-child { border-bottom: none; }
+.fba-dropdown-item.fba-logout { color: #e53935; }
+.fba-dropdown-item:hover { background-color: #f5f5f5; }
+.fba-arrow { font-size: 18px; color: #999; }
+
+/* Content */
+.fba-content {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+}
+
+.fba-count {
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 16px 0;
+}
+
+.fba-loading {
+  text-align: center;
+  color: #888;
+  margin-top: 40px;
+}
+
+.fba-empty {
+  text-align: center;
+  color: #aaa;
+  margin-top: 60px;
+  font-size: 15px;
+}
+
+/* Card list */
+.fba-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fba-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.fba-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.fba-card-user {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fba-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.fba-card-email {
+  font-size: 12px;
+  color: #999;
+}
+
+.fba-delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  color: #bbb;
+  transition: background 0.2s, color 0.2s;
+}
+
+.fba-delete-btn:hover {
+  background: rgba(191, 67, 67, 0.1);
+  color: #bf4343;
+}
+
+.fba-card-message {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.fba-card-date {
+  font-size: 11px;
+  color: #bbb;
+}
+
+/* Modal */
+.fba-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.fba-modal {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.fba-modal-text {
+  margin: 0 0 24px 0;
+  font-size: 16px;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.fba-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.fba-modal-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #F5F0E8;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.fba-modal-cancel:hover { background: #e8e3db; }
+
+.fba-modal-confirm {
+  flex: 1;
+  padding: 12px;
+  background: #bf4343;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.fba-modal-confirm:hover { background: #a33636; }

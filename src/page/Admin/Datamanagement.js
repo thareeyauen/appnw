@@ -45,6 +45,10 @@ const Datamanagement = () => {
                 <span>My Profile</span>
                 <span className="dm-arrow">›</span>
               </div>
+              <div className="dm-dropdown-item" onClick={() => navigate('/feedback')}>
+                <span>Feedback</span>
+                <span className="dm-arrow">›</span>
+              </div>
               <div className="dm-dropdown-item dm-logout" onClick={() => navigate('/Login')}>
                 <span>Log out</span>
                 <span className="dm-arrow">›</span>

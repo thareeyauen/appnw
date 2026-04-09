@@ -109,6 +109,9 @@ const Typeuser = () => {
               <div className="tu-dropdown-item" onClick={() => navigate('/profile')}>
                 <span>My Profile</span><span className="tu-arrow">›</span>
               </div>
+              <div className="tu-dropdown-item" onClick={() => navigate('/feedback')}>
+                <span>Feedback</span><span className="tu-arrow">›</span>
+              </div>
               <div className="tu-dropdown-item tu-logout" onClick={() => navigate('/Login')}>
                 <span>Log out</span><span className="tu-arrow">›</span>
               </div>
