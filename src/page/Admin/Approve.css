@@ -382,7 +382,47 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
+/* Desktop */
+@media (min-width: 1024px) {
+  .approve-header {
+    padding: 0 48px;
+  }
+
+  .approve-content {
+    max-width: 1000px;
+    padding: 0 48px 60px;
+  }
+
+  .approve-section {
+    width: 100%;
+  }
+
+  .approve-sections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    align-items: start;
+  }
+
+  .approve-sections-grid .approve-section {
+    margin-bottom: 0;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .approve-header {
+    padding: 0 32px;
+  }
+
+  .approve-content {
+    max-width: 800px;
+    padding: 0 32px 60px;
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   .approve-header {
     padding: 16px;

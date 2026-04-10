@@ -33,6 +33,27 @@ const COUNTRY_OPTIONS = [
   'Uzbekistan', 'Venezuela', 'Vietnam', 'Yemen', 'Zimbabwe',
 ];
 
+const NATIONALITY_OPTIONS = [
+  'Afghan', 'Albanian', 'Algerian', 'American', 'Argentine', 'Armenian',
+  'Australian', 'Austrian', 'Azerbaijani', 'Bahraini', 'Bangladeshi',
+  'Belarusian', 'Belgian', 'Bolivian', 'Bosnian', 'Brazilian', 'British',
+  'Bulgarian', 'Cambodian', 'Cameroonian', 'Canadian', 'Chilean', 'Chinese',
+  'Colombian', 'Croatian', 'Czech', 'Danish', 'Dutch', 'Ecuadorian', 'Egyptian',
+  'Emirati', 'Estonian', 'Ethiopian', 'Filipino', 'Finnish', 'French',
+  'Georgian', 'German', 'Ghanaian', 'Greek', 'Hungarian', 'Indian',
+  'Indonesian', 'Iranian', 'Iraqi', 'Irish', 'Israeli', 'Italian', 'Japanese',
+  'Jordanian', 'Kazakhstani', 'Kenyan', 'Kuwaiti', 'Kyrgyz', 'Lao', 'Latvian',
+  'Lebanese', 'Lithuanian', 'Luxembourgish', 'Malaysian', 'Mexican',
+  'Mongolian', 'Moroccan', 'Burmese', 'Nepali', 'New Zealander', 'Nigerian',
+  'North Korean', 'Norwegian', 'Omani', 'Pakistani', 'Palestinian', 'Peruvian',
+  'Polish', 'Portuguese', 'Qatari', 'Romanian', 'Russian', 'Saudi Arabian',
+  'Serbian', 'Singaporean', 'Slovak', 'Slovenian', 'South African',
+  'South Korean', 'Spanish', 'Sri Lankan', 'Swedish', 'Swiss', 'Syrian',
+  'Taiwanese', 'Tajik', 'Tanzanian', 'Thai', 'Tunisian', 'Turkish',
+  'Turkmen', 'Ugandan', 'Ukrainian', 'Uruguayan', 'Uzbek', 'Venezuelan',
+  'Vietnamese', 'Yemeni', 'Zimbabwean',
+];
+
 const Addmember = () => {
   const navigate = useNavigate();
 
@@ -337,13 +358,13 @@ const Addmember = () => {
             <div className="form-group">
               <label className="form-label">National / สัญชาติ</label>
               <select
-                name="location"
+                name="national"
                 className="form-input form-select"
-                value={formData.location}
+                value={formData.national}
                 onChange={handleChange}
               >
                 <option value="">-- เลือกสัญชาติ --</option>
-                {COUNTRY_OPTIONS.map((c) => (
+                {NATIONALITY_OPTIONS.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>

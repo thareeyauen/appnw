@@ -81,6 +81,7 @@ const Member = () => {
           )}
         </div>
 
+        <div className="member-sections-grid">
         {/* Personal Detail - นำข้อมูลจาก member มาใช้ */}
         <section className="detail-section">
           <h2 className="section-title">Personal Detail</h2>
@@ -211,6 +212,7 @@ const Member = () => {
             />
           </div>
         </section>
+        </div>{/* end member-sections-grid */}
 
         {/* Note */}
         {member.note && (

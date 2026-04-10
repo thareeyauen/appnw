@@ -3,13 +3,12 @@
   font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif;
 }
 .landing-container {
- min-height: 100vh;
- width: 100%;
- display: flex;
- flex-direction: column;
- background-color: #F5F0E8;
- justify-content: center;
- align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #F5F0E8;
+  align-items: center;
 }
 
 /* Top bar */
@@ -85,7 +84,7 @@
 /* Content */
 .content {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   padding: 24px 20px;
   flex: 1;
 }
@@ -106,11 +105,10 @@
 .search-box {
   margin-top: 16px;
   position: relative;
-  max-width: 320px;
 }
 
 .search-box input {
-  width: 115%;
+  width: 100%;
   padding: 10px 40px 10px 14px;
   border-radius: 20px;
   border: none;
@@ -132,9 +130,55 @@
 
 .card-list {
   margin-top: 16px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 12px;
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+  .top-bar {
+    padding: 0 32px;
+  }
+
+  .content {
+    max-width: 900px;
+    padding: 28px 32px;
+  }
+
+  .search-box {
+    max-width: 480px;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 1200px) {
+  .top-bar {
+    padding: 0 48px;
+  }
+
+  .content {
+    max-width: 1400px;
+    padding: 32px 48px;
+  }
+
+  .search-box {
+    max-width: 560px;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .content h1 {
+    font-size: 52px;
+  }
 }
 
 .pagination {
