@@ -293,8 +293,8 @@ const Editmember = () => {
             <label className="form-label">National / สัญชาติ</label>
             <select
               className="form-input"
-              value={member.location || ''}
-              onChange={e => handleChange('location', e.target.value)}
+              value={member.national || ''}
+              onChange={e => handleChange('national', e.target.value)}
             >
               <option value="">-- เลือกสัญชาติ --</option>
               {COUNTRIES.map(c => (
@@ -310,6 +310,17 @@ const Editmember = () => {
               className="form-input"
               value={member.email || ''}
               onChange={e => handleChange('email', e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Phone / เบอร์โทรศัพท์</label>
+            <input
+              type="tel"
+              className="form-input"
+              placeholder="e.g. +66 81 234 5678"
+              value={member.phone || ''}
+              onChange={e => handleChange('phone', e.target.value)}
             />
           </div>
 
@@ -461,9 +472,37 @@ const Editmember = () => {
 
         {/* Name Card */}
         <div className="name-card-preview-section">
-          {nameCardPreview && (
-            <img src={nameCardPreview} alt="Name Card" className="name-card-image" style={{ marginBottom: '12px' }} />
-          )}
+          <h2 className="note-title">Name Card</h2>
+          <div className="namecard-display" style={{ marginBottom: '12px' }}>
+            <span className="namecard-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" fill="#1a1a1a"/>
+                <path d="M3 17l5-5 4 4 3-3 6 6" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="8.5" cy="8.5" r="1.5" fill="white"/>
+              </svg>
+            </span>
+            {nameCardFile ? (
+              <a
+                className="namecard-link"
+                href={nameCardPreview}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {nameCardFile.name}
+              </a>
+            ) : member.nameCard ? (
+              <a
+                className="namecard-link"
+                href={nameCardPreview}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {member.nameCard.split('/').pop()}
+              </a>
+            ) : (
+              <span className="namecard-empty">ไม่มีไฟล์</span>
+            )}
+          </div>
           <div className="em-namecard-row">
             <label className="em-namecard-btn">
               <span className="em-namecard-icon">

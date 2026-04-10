@@ -33,9 +33,15 @@ const Newuser = () => {
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [emailError, setEmailError] = useState('');
+
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
+    if (field === 'email') {
+      setEmailError(value && !isValidEmail(value) ? 'รูปแบบอีเมลไม่ถูกต้อง' : '');
+    }
   };
 
   const handleCopy = () => {
@@ -90,12 +96,14 @@ const Newuser = () => {
         <div className="nu-field">
           <label className="nu-label">Email</label>
           <input
-            className="nu-input"
+            className={`nu-input${emailError ? ' nu-input--error' : ''}`}
             type="email"
             placeholder="Value"
             value={form.email}
             onChange={e => handleChange('email', e.target.value)}
+            onBlur={e => setEmailError(e.target.value && !isValidEmail(e.target.value) ? 'รูปแบบอีเมลไม่ถูกต้อง' : '')}
           />
+          {emailError && <span className="nu-field-error">{emailError}</span>}
         </div>
 
         <div className="nu-field">
@@ -130,7 +138,13 @@ const Newuser = () => {
           </div>
         </div>
 
-        <button className="nu-save-btn" onClick={() => setShowConfirm(true)} disabled={saving}>
+        <button className="nu-save-btn" onClick={() => {
+          if (!form.email || !isValidEmail(form.email)) {
+            setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
+            return;
+          }
+          setShowConfirm(true);
+        }} disabled={saving}>
           Save
         </button>
       </div>

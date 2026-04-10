@@ -238,3 +238,45 @@
 }
 
 .fba-modal-confirm:hover { background: #a33636; }
+
+/* Pagination */
+.fba-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.fba-page-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d0c8bc;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #534c4c;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+
+.fba-page-btn:hover:not(:disabled) {
+  background: #534c4c;
+  color: #ffffff;
+}
+
+.fba-page-btn--active {
+  background: #534c4c;
+  color: #ffffff;
+  border-color: #534c4c;
+  font-weight: 700;
+}
+
+.fba-page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}

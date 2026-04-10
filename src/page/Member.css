@@ -265,6 +265,35 @@
   object-fit: contain;
 }
 
+.namecard-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.namecard-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.namecard-link {
+  font-size: 14px;
+  color: #534c4c;
+  text-decoration: underline;
+  word-break: break-all;
+  cursor: pointer;
+}
+
+.namecard-link:hover {
+  color: #000;
+}
+
+.namecard-empty {
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .member-header {

@@ -38,6 +38,9 @@ function Landing() {
       .catch(() => {});
   }, []);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 15;
+
   const q = searchQuery.trim().toLowerCase();
   const filteredContacts = q
     ? contacts.filter(c => {
@@ -46,12 +49,18 @@ function Landing() {
           (c.name || '').toLowerCase().includes(q) ||
           (c.name_th || '').toLowerCase().includes(q) ||
           (c.email || '').toLowerCase().includes(q) ||
-          (c.location || '').toLowerCase().includes(q) ||
+          (c.national || '').toLowerCase().includes(q) ||
           (c.project || '').toLowerCase().includes(q) ||
           tagLabels.includes(q)
         );
       })
     : contacts;
+
+  const totalPages = Math.ceil(filteredContacts.length / PAGE_SIZE);
+  const safePage = Math.min(currentPage, totalPages || 1);
+  const pageContacts = filteredContacts.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handleSearch = (val) => { setSearchQuery(val); setCurrentPage(1); };
 
   return (
     <div className="landing-container">
@@ -97,7 +106,7 @@ function Landing() {
           <input
             placeholder="Searching"
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={e => handleSearch(e.target.value)}
           />
         </div>
 
@@ -107,22 +116,44 @@ function Landing() {
           <p className="people-count">{filteredContacts.length} people</p>
         )}
 
-<div className="card-list">
-  {filteredContacts.map(contact => (
-    <Card
-      key={contact.id}
-      id={contact.id}
-      name={contact.name}
-      name_th={contact.name_th}
-      project={contact.project}
-      location={contact.location}
-      tags={contact.tags}
-      email={contact.email}
-      avatar={contact.avatar ? `${API_URL}${contact.avatar}` : null}
-      expertiseDescMap={expertiseDescMap}
-    />
-  ))}
-</div>
+        <div className="card-list">
+          {pageContacts.map(contact => (
+            <Card
+              key={contact.id}
+              id={contact.id}
+              name={contact.name}
+              name_th={contact.name_th}
+              project={contact.project}
+              location={contact.country}
+              tags={contact.tags}
+              email={contact.email}
+              avatar={contact.avatar ? `${API_URL}${contact.avatar}` : null}
+              expertiseDescMap={expertiseDescMap}
+            />
+          ))}
+        </div>
+
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button
+              className="pagination-btn"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={safePage === 1}
+            >‹</button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+              <button
+                key={p}
+                className={`pagination-btn${safePage === p ? ' pagination-btn--active' : ''}`}
+                onClick={() => setCurrentPage(p)}
+              >{p}</button>
+            ))}
+            <button
+              className="pagination-btn"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={safePage === totalPages}
+            >›</button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -110,18 +110,28 @@ const Member = () => {
             <input 
               type="text" 
               className="form-input" 
-              value={member.location} 
+              value={member.national || ''}
               readOnly 
             />
           </div>
 
           <div className="form-group">
             <label className="form-label">Email / อีเมล</label>
-            <input 
-              type="email" 
-              className="form-input" 
-              value={member.email} 
-              readOnly 
+            <input
+              type="email"
+              className="form-input"
+              value={member.email}
+              readOnly
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Phone / เบอร์โทรศัพท์</label>
+            <input
+              type="tel"
+              className="form-input"
+              value={member.phone || ''}
+              readOnly
             />
           </div>
 
@@ -215,16 +225,30 @@ const Member = () => {
         )}
 
         {/* Name Card */}
-        {member.nameCard && (
-          <div className="name-card-preview-section">
-            <h2 className="note-title">Name Card</h2>
-            <img
-              src={`${API_URL}${member.nameCard}`}
-              alt="Name Card"
-              className="name-card-image"
-            />
+        <div className="name-card-preview-section">
+          <h2 className="note-title">Name Card</h2>
+          <div className="namecard-display">
+            <span className="namecard-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" fill="#1a1a1a"/>
+                <path d="M3 17l5-5 4 4 3-3 6 6" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="8.5" cy="8.5" r="1.5" fill="white"/>
+              </svg>
+            </span>
+            {member.nameCard ? (
+              <a
+                className="namecard-link"
+                href={`${API_URL}${member.nameCard}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {member.nameCard.split('/').pop()}
+              </a>
+            ) : (
+              <span className="namecard-empty">ไม่มีไฟล์</span>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

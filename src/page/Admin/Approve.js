@@ -61,8 +61,9 @@ const Approve = () => {
   const [formData, setFormData] = useState({
     name: '',
     name_th: '',
-    location: '',
+    national: '',
     email: '',
+    phone: '',
     tags: [],
     tagsOther: '',
     tagsOtherDesc: '',
@@ -104,8 +105,12 @@ const Approve = () => {
       .then((data) => {
         console.log('[Approve] API response:', data);
         setMember(data);
-        if (data.avatar) setProfileImage(data.avatar);
-        if (data.nameCard) setNameCardName(data.nameCard);
+        if (data.avatar) setProfileImage(
+          data.avatar.startsWith('http') ? data.avatar : `${API_URL}${data.avatar}`
+        );
+        if (data.nameCard) setNameCardName(
+          data.nameCard.startsWith('http') ? data.nameCard : `${API_URL}${data.nameCard}`
+        );
         setLoading(false);
       })
       .catch((err) => {
@@ -130,8 +135,9 @@ const Approve = () => {
     setFormData({
       name: member.name || '',
       name_th: member.name_th || '',
-      location: member.location || '',
+      national: member.national || '',
       email: member.email || '',
+      phone: member.phone || '',
       tags: [...selectedKnown, ...(customLabels.length > 0 ? ['Other'] : [])],
       tagsOther: customLabels.join(', '),
       tagsOtherDesc: customDesc,
@@ -192,8 +198,9 @@ const Approve = () => {
     const payload = {
       name: formData.name,
       name_th: formData.name_th,
-      location: formData.location,
+      national: formData.national,
       email: formData.email,
+      phone: formData.phone,
       tags: tagsArray,
       network: formData.network,
       project: formData.project,
@@ -330,7 +337,7 @@ const Approve = () => {
           />
         </label>
         <p className="approve-submit-info">
-          Submit by {member?.name || '-'}&nbsp;-&nbsp;{formatDate(member?.created_at)}
+          Submit by {member?.submitted_by || '-'}&nbsp;-&nbsp;{formatDate(member?.created_at)}
         </p>
 
         {/* Personal Detail */}
@@ -384,6 +391,18 @@ const Approve = () => {
               className="approve-input"
               placeholder="example@email.com"
               value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="approve-form-group">
+            <label className="approve-label">Phone / เบอร์โทรศัพท์</label>
+            <input
+              type="tel"
+              name="phone"
+              className="approve-input"
+              placeholder="e.g. +66 81 234 5678"
+              value={formData.phone}
               onChange={handleChange}
             />
           </div>
@@ -539,9 +558,18 @@ const Approve = () => {
                 <circle cx="8.5" cy="8.5" r="1.5" fill="white"/>
               </svg>
             </span>
-            <span className="approve-namecard-filename">
-              {nameCardName || 'ไม่มีไฟล์'}
-            </span>
+            {nameCardName ? (
+              <a
+                className="approve-namecard-filename approve-namecard-link"
+                href={nameCardName}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {nameCardName.split('/').pop()}
+              </a>
+            ) : (
+              <span className="approve-namecard-filename">ไม่มีไฟล์</span>
+            )}
           </div>
         </div>
 

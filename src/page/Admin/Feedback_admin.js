@@ -24,11 +24,18 @@ const FeedbackAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 15;
 
   useEffect(() => {
     fetch(`${API_URL}/api/feedback`, { headers: authHeaders(false) })
       .then(res => { handleUnauthorized(res.status); return res.json(); })
-      .then(data => setFeedbacks(Array.isArray(data) ? data : []))
+      .then(data => {
+        const sorted = Array.isArray(data)
+          ? [...data].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+          : [];
+        setFeedbacks(sorted);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -39,7 +46,12 @@ const FeedbackAdmin = () => {
         method: 'DELETE',
         headers: authHeaders(false),
       });
-      setFeedbacks(prev => prev.filter(f => f.id !== deleteTarget.id));
+      setFeedbacks(prev => {
+        const next = prev.filter(f => f.id !== deleteTarget.id);
+        const maxPage = Math.ceil(next.length / PAGE_SIZE) || 1;
+        setCurrentPage(p => Math.min(p, maxPage));
+        return next;
+      });
     } catch { /* ignore */ }
     setDeleteTarget(null);
   };
@@ -93,25 +105,53 @@ const FeedbackAdmin = () => {
           <div className="fba-empty">
             <p>ยังไม่มี feedback</p>
           </div>
-        ) : (
-          <div className="fba-list">
-            {feedbacks.map(fb => (
-              <div key={fb.id} className="fba-card">
-                <div className="fba-card-top">
-                  <div className="fba-card-user">
-                    <span className="fba-card-name">{fb.name || 'ไม่ระบุชื่อ'}</span>
-                    <span className="fba-card-email">{fb.email}</span>
+        ) : (() => {
+          const totalPages = Math.ceil(feedbacks.length / PAGE_SIZE);
+          const safePage = Math.min(currentPage, totalPages);
+          const pageFeedbacks = feedbacks.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+          return (
+            <>
+              <div className="fba-list">
+                {pageFeedbacks.map(fb => (
+                  <div key={fb.id} className="fba-card">
+                    <div className="fba-card-top">
+                      <div className="fba-card-user">
+                        <span className="fba-card-name">{fb.name || 'ไม่ระบุชื่อ'}</span>
+                        <span className="fba-card-email">{fb.email}</span>
+                      </div>
+                      <button className="fba-delete-btn" title="ลบ" onClick={() => setDeleteTarget(fb)}>
+                        <TrashIcon />
+                      </button>
+                    </div>
+                    <p className="fba-card-message">{fb.message}</p>
+                    <span className="fba-card-date">{formatDate(fb.created_at)}</span>
                   </div>
-                  <button className="fba-delete-btn" title="ลบ" onClick={() => setDeleteTarget(fb)}>
-                    <TrashIcon />
-                  </button>
-                </div>
-                <p className="fba-card-message">{fb.message}</p>
-                <span className="fba-card-date">{formatDate(fb.created_at)}</span>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
+              {totalPages > 1 && (
+                <div className="fba-pagination">
+                  <button
+                    className="fba-page-btn"
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={safePage === 1}
+                  >‹</button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                    <button
+                      key={p}
+                      className={`fba-page-btn${safePage === p ? ' fba-page-btn--active' : ''}`}
+                      onClick={() => setCurrentPage(p)}
+                    >{p}</button>
+                  ))}
+                  <button
+                    className="fba-page-btn"
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={safePage === totalPages}
+                  >›</button>
+                </div>
+              )}
+            </>
+          );
+        })()}
       </div>
 
       {/* Delete modal */}

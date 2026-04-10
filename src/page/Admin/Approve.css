@@ -296,6 +296,17 @@
   color: #1a1a1a;
 }
 
+.approve-namecard-link {
+  color: #534c4c;
+  text-decoration: underline;
+  word-break: break-all;
+  cursor: pointer;
+}
+
+.approve-namecard-link:hover {
+  color: #000;
+}
+
 /* Error / Success */
 .approve-error {
   background: #fff0f0;

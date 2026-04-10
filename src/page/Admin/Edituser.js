@@ -18,6 +18,7 @@ const Edituser = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDoneConfirm, setShowDoneConfirm] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -64,8 +65,13 @@ const Edituser = () => {
       });
   }, [id]);
 
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const handleChange = (field, value) => {
     setUser(prev => ({ ...prev, [field]: value }));
+    if (field === 'email') {
+      setEmailError(value && !isValidEmail(value) ? 'รูปแบบอีเมลไม่ถูกต้อง' : '');
+    }
   };
 
   const handleSave = async () => {
@@ -135,11 +141,13 @@ const Edituser = () => {
         <div className="eu-field">
           <label className="eu-label">Email</label>
           <input
-            className="eu-input"
+            className={`eu-input${emailError ? ' eu-input--error' : ''}`}
             type="email"
             value={user.email || ''}
             onChange={e => handleChange('email', e.target.value)}
+            onBlur={e => setEmailError(e.target.value && !isValidEmail(e.target.value) ? 'รูปแบบอีเมลไม่ถูกต้อง' : '')}
           />
+          {emailError && <span className="eu-field-error">{emailError}</span>}
         </div>
 
         <div className="eu-field">
@@ -173,7 +181,13 @@ const Edituser = () => {
 
       {/* Action Buttons */}
       <div className="eu-action-row">
-        <button className="eu-done-btn" onClick={() => setShowDoneConfirm(true)} disabled={saving}>
+        <button className="eu-done-btn" onClick={() => {
+          if (!user.email || !isValidEmail(user.email)) {
+            setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
+            return;
+          }
+          setShowDoneConfirm(true);
+        }} disabled={saving}>
           Save
         </button>
         <button className="eu-delete-btn" onClick={() => setShowDeleteConfirm(true)} disabled={deleting}>

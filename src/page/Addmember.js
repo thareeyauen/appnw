@@ -39,8 +39,9 @@ const Addmember = () => {
   const [formData, setFormData] = useState({
     name: '',
     name_th: '',
-    location: '',
+    national: '',
     email: '',
+    phone: '',
     tags: [],
     tagsOther: '',
     tagsOtherDesc: '',
@@ -142,8 +143,9 @@ const Addmember = () => {
     const body = new FormData();
     body.append('name', formData.name);
     body.append('name_th', formData.name_th);
-    body.append('location', formData.location);
+    body.append('national', formData.national);
     body.append('email', formData.email);
+    body.append('phone', formData.phone);
     body.append('tags', JSON.stringify(tagsArray));
     body.append('network', formData.network);
     body.append('project', formData.project);
@@ -194,8 +196,6 @@ const Addmember = () => {
       // Parse response to get created submission ID
       let created = {};
       try { created = await response.json(); } catch (_) {}
-      // debug: ตรวจรูปแบบ response จาก backend
-      console.log('[Addmember] POST response body:', created);
 
       // รองรับหลายรูปแบบ: { id }, { _id }, { data: { id } }, { submission: { id } }
       const submissionId =
@@ -205,7 +205,18 @@ const Addmember = () => {
         created.data?._id ??
         created.submission?.id ??
         created.submission?._id ??
-        null; // null = ไม่ได้ ID จริง → fallback ใช้ name/email matching แทน
+        null;
+
+      // Upload namecard as separate request after getting submission ID
+      if (submissionId && nameCard) {
+        const ncForm = new FormData();
+        ncForm.append('nameCard', nameCard, nameCard.name);
+        await fetch(`${API_URL}/api/submissions/${submissionId}/namecard`, {
+          method: 'POST',
+          headers: authHeaders(false),
+          body: ncForm,
+        }).catch(() => {});
+      }
 
       // Save submission to localStorage so Profile can show it (per-user key)
       const lsKey  = `mySubmissions_${getUser()?.email || 'guest'}`;
@@ -215,7 +226,7 @@ const Addmember = () => {
         name: formData.name,
         project: formData.project,
         country: formData.country,
-        location: formData.location,
+        national: formData.national,
         email: formData.email,
         tags: tagsArray,
         created_at: created.created_at || new Date().toISOString(),
@@ -346,6 +357,18 @@ const Addmember = () => {
                 className="form-input"
                 placeholder="example@email.com"
                 value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Phone / เบอร์โทรศัพท์</label>
+              <input
+                type="tel"
+                name="phone"
+                className="form-input"
+                placeholder="e.g. +66 81 234 5678"
+                value={formData.phone}
                 onChange={handleChange}
               />
             </div>

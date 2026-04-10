@@ -71,7 +71,7 @@ const Requirement = () => {
           members.map((member) => (
             <div key={member.id} className="req-card">
               <div className="req-card-header">
-                <span>Submit by {member.name}</span>
+                <span>Submit by {member.submitted_by || member.name}</span>
                 {member.created_at && (
                   <span className="req-card-date">{formatDate(member.created_at)}</span>
                 )}
