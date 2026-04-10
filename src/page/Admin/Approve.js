@@ -244,7 +244,8 @@ const Approve = () => {
       const result = await response.json();
       const newPersonId = result.data?.id || result.data?._id;
 
-      if (newPersonId && profileImage) {
+      // Only re-upload if admin selected a new image (blob: URL), not the original submission avatar
+      if (newPersonId && profileImage && profileImage.startsWith('blob:')) {
         const imgRes = await fetch(profileImage);
         const blob = await imgRes.blob();
         const form = new FormData();

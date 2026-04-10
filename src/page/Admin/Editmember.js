@@ -82,8 +82,9 @@ const Editmember = () => {
       })
       .then(data => {
         setMember(data);
-        setAvatarPreview(data.avatar ? `${API_URL}${data.avatar}` : (data.photo ? `${API_URL}${data.photo}` : null));
-        setNameCardPreview(data.nameCard ? `${API_URL}${data.nameCard}` : null);
+        const resolveUrl = (url) => url ? (url.startsWith('http') ? url : `${API_URL}${url}`) : null;
+        setAvatarPreview(data.avatar ? resolveUrl(data.avatar) : resolveUrl(data.photo));
+        setNameCardPreview(resolveUrl(data.nameCard));
         setLoading(false);
       })
       .catch(error => {

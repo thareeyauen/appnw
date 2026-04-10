@@ -127,7 +127,7 @@ function Landing() {
               location={contact.country}
               tags={contact.tags}
               email={contact.email}
-              avatar={contact.avatar ? `${API_URL}${contact.avatar}` : null}
+              avatar={contact.avatar ? (contact.avatar.startsWith('http') ? contact.avatar : `${API_URL}${contact.avatar}`) : null}
               expertiseDescMap={expertiseDescMap}
             />
           ))}
