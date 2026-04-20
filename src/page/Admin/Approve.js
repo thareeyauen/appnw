@@ -196,10 +196,12 @@ const Approve = () => {
     await new Promise(r => { img.onload = r; });
     const canvas = document.createElement('canvas');
     const { x, y, width, height } = croppedAreaPixels;
-    canvas.width = width;
-    canvas.height = height;
+    const MAX_SIZE = 800;
+    const target = Math.min(MAX_SIZE, width);
+    canvas.width = target;
+    canvas.height = target;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
+    ctx.drawImage(img, x, y, width, height, 0, 0, target, target);
     canvas.toBlob(blob => {
       setProfileImage(URL.createObjectURL(blob));
       setCropImage(null);
